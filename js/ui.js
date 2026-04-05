@@ -316,7 +316,7 @@ function _buildBadData(dates) {
       if (day < new Date(h.createdAt)) return;
       if (h.slips?.[dk]) return;
       if (dk === tk) {
-        if (h._cleanToday) clean++;
+        if (cleanTodaySet.has(h.id)) clean++;
         else neutral++;
       } else {
         clean++;

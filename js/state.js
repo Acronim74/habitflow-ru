@@ -6,6 +6,7 @@ let gender        = null; // 'female' | 'male' | null
 let moodLog       = {};   // { "YYYY-MM-DD": 0..4 }
 let moodEnabled   = false; // дневник настроения вкл/выкл
 let currentScreen = 'today';
+let cleanTodaySet = new Set(); // runtime only, не сохраняется
 
 /** Период теплокарт на экране «Аналитика»: 'year' | 'quarter' | 'month' | 'week' */
 let _analyticsPeriod = 'month';
@@ -56,6 +57,7 @@ function loadData() {
 // ── Миграция старых данных ─────────────────
 function _migrateData() {
   [...habits, ...archived].forEach(h => {
+    delete h._cleanToday;
     if (!h.id)        h.id       = _uuid();
     if (!h.checks)    h.checks   = {};
     if (!h.times)     h.times    = {};

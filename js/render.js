@@ -470,7 +470,7 @@ function _sortHabits(list) {
 // ── Карточка вредной привычки ──────────────
 
 function _buildBCard(h, tk) {
-  const isClean   = h._cleanToday === true;
+  const isClean   = cleanTodaySet.has(h.id);
   const isSlipped = !!h.slips?.[tk];
   const streak    = calcCleanStreakAt(h, tk);
 
@@ -536,7 +536,7 @@ function _buildBCard(h, tk) {
 
 function _renderBadProgress(bad, tk) {
   const total   = bad.length;
-  const clean   = bad.filter(h => h._cleanToday).length;
+  const clean   = bad.filter(h => cleanTodaySet.has(h.id)).length;
   const slipped = bad.filter(h => !!h.slips?.[tk]).length;
   const neutral = total - clean - slipped;
 

@@ -91,7 +91,7 @@ function markBadClean(habitId) {
   const h = habits.find(x => x.id === habitId);
   if (!h) return;
   if (!h.slips) h.slips = {};
-  h._cleanToday = true;
+  cleanTodaySet.add(habitId);
   delete h.slips[_todayKey()];
   saveData();
   renderToday();
@@ -102,7 +102,7 @@ function resetBadCard(habitId) {
   const h = habits.find(x => x.id === habitId);
   if (!h) return;
   if (!h.slips) h.slips = {};
-  delete h._cleanToday;
+  cleanTodaySet.delete(habitId);
   delete h.slips[_todayKey()];
   saveData();
   renderToday();
@@ -143,7 +143,7 @@ function confirmSlip(habitId) {
 
   if (!h.slips) h.slips = {};
   h.slips[tk] = true;
-  delete h._cleanToday;
+  cleanTodaySet.delete(habitId);
   if (!h.notes) h.notes = {};
   if (!h.notes[tk]) h.notes[tk] = {};
   if (trigger) h.notes[tk].trigger = trigger;
