@@ -226,14 +226,12 @@ function _buildHCard(h, tk, isBonus) {
         { hour:'2-digit', minute:'2-digit' })
     : '';
 
-  // Класс обёртки (для CSS transform)
   let wrapCls = 'hcard';
   if (isBonus && isDone)   wrapCls += ' hc-bonus-done';
   else if (isBonus)        wrapCls += ' hc-bonus';
   else if (isDone)         wrapCls += ' hc-done';
   else if (_isNextCard(h)) wrapCls += ' hc-active';
 
-  // Подпись стрика
   const subText = streak > 0
     ? `🔥 ${streak} дней подряд${scheduleLabel(h)}`
     : (scheduleLabel(h).slice(3) || 'Нет стрика');
@@ -241,23 +239,16 @@ function _buildHCard(h, tk, isBonus) {
     ? 'hcard-sub hs-streak'
     : 'hcard-sub' + (isBonus ? ' hs-bonus' : '');
 
-  // Обратная сторона
   const backCls  = 'hcard-back' + (isBonus ? ' hback-bonus' : '');
-  const backIco   = isBonus ? '★' : '✓';
+  const backIco  = isBonus ? '★' : '✓';
   const backTitle = isBonus ? 'Бонус засчитан!' : 'Выполнено!';
-
-  // Лицевая сторона — класс границы
-  let frontCls = 'hcard-front';
-  if (!isDone && isBonus)      frontCls += ' hc-bonus-front';
-  if (!isDone && _isNextCard(h)) frontCls += ' hc-active-front';
 
   const wrap = document.createElement('div');
   wrap.className = 'hcard-flip-wrap';
   wrap.innerHTML = `
     <div class="${wrapCls}" id="hcard-${h.id}">
 
-      <!-- Лицевая сторона -->
-      <div class="${frontCls}">
+      <div class="hcard-front">
         <div class="hcard-row" onclick="toggleCheck('${h.id}')">
           <div class="hcard-done-zone">
             <div class="hcard-done-ico">${backIco}</div>
@@ -279,7 +270,6 @@ function _buildHCard(h, tk, isBonus) {
         </div>
       </div>
 
-      <!-- Обратная сторона -->
       <div class="${backCls}">
         <div class="hcard-back-ico">${backIco}</div>
         <div class="hcard-back-info">
