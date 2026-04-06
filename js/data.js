@@ -1,5 +1,6 @@
 // ── Константы ──────────────────────────────
 const LS_KEY = 'habitflow_data';
+const SCHEMA_VERSION = 1;
 const TODAY  = new Date();
 
 // Стадии развития персонажа

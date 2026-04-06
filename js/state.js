@@ -22,6 +22,7 @@ let _createSchedule = null;   // null = каждый день
 function saveData() {
   try {
     const data = {
+      schemaVersion: SCHEMA_VERSION,
       habits,
       archived,
       earnedBadges,
@@ -42,6 +43,7 @@ function loadData() {
     const raw = localStorage.getItem(LS_KEY);
     if (!raw) return;
     const d = JSON.parse(raw);
+    _runMigrations(d);
     habits       = Array.isArray(d.habits)       ? d.habits       : [];
     archived     = Array.isArray(d.archived)     ? d.archived     : [];
     earnedBadges = Array.isArray(d.earnedBadges) ? d.earnedBadges : [];
@@ -82,4 +84,32 @@ function _migrateData() {
     }
   });
   if (moodMigrateDirty) saveData();
+}
+
+// ── Миграции схемы данных ──────────────────
+function _runMigrations(d) {
+  const v = d.schemaVersion || 0;
+
+  // v0 → v1: moodLog переехал из h.notes в отдельный объект
+  if (v < 1) {
+    if (!d.moodLog) d.moodLog = {};
+    const allHabits = [
+      ...(Array.isArray(d.habits)   ? d.habits   : []),
+      ...(Array.isArray(d.archived) ? d.archived : []),
+    ];
+    allHabits.forEach(h => {
+      if (h.notes) {
+        Object.entries(h.notes).forEach(([dk, note]) => {
+          if (note.mood !== undefined && d.moodLog[dk] === undefined) {
+            d.moodLog[dk] = note.mood;
+          }
+          delete note.mood;
+        });
+      }
+    });
+  }
+
+  // Здесь будут добавляться новые миграции:
+  // if (v < 2) { ... }
+  // if (v < 3) { ... }
 }
