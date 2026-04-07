@@ -188,6 +188,7 @@ function saveMood(idx, tk) {
 // ── Создание привычки ─────────────────────
 
 function openCreate(type) {
+  _editingId      = null;
   _createType     = type || 'good';
   _createIcon     = _createType === 'bad' ? '🚫' : '⭐';
   _createCat      = '';
@@ -251,6 +252,103 @@ function openCreate(type) {
 
   _buildIconGrid();
   _buildCatGrid();
+  document.getElementById('createOverlay').classList.add('open');
+  document.getElementById('createName').focus();
+}
+
+function openEdit(habitId) {
+  const h = habits.find(x => x.id === habitId);
+  if (!h) return;
+
+  _editingId      = habitId;
+  _createType     = h.bad ? 'bad' : 'good';
+  _createIcon     = h.icon || (h.bad ? '🚫' : '⭐');
+  _createCat      = h.category || '';
+  _createSchedule = (!h.schedule || h.schedule.length === 0)
+    ? null
+    : [...h.schedule];
+
+  const modal = document.getElementById('createModal');
+  modal.innerHTML = `
+    <div class="modal-title">Редактировать привычку</div>
+
+    <div class="field">
+      <label class="field-label">Иконка</label>
+      <div id="iconGrid" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Название</label>
+      <input class="field-input" id="createName"
+             value="${esc(h.name)}"
+             placeholder="напр. Пробежка, Не курить...">
+    </div>
+
+    <div class="field">
+      <label class="field-label">Категория</label>
+      <div id="catGrid" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    </div>
+
+    <div class="field" id="scheduleField"
+         ${h.bad ? 'style="display:none"' : ''}>
+      <label class="field-label">Расписание</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="schedPresets">
+        <button type="button" class="btn ${!h.schedule || h.schedule.length===0 ? 'btn-primary' : 'btn-ghost'} btn-sm"
+                onclick="setSchedule(this,'every')">Каждый день</button>
+        <button type="button" class="btn ${JSON.stringify(h.schedule)==='[0,1,2,3,4]' ? 'btn-primary' : 'btn-ghost'} btn-sm"
+                onclick="setSchedule(this,'weekdays')">Будни</button>
+        <button type="button" class="btn ${JSON.stringify(h.schedule)==='[5,6]' ? 'btn-primary' : 'btn-ghost'} btn-sm"
+                onclick="setSchedule(this,'weekend')">Выходные</button>
+        <button type="button" class="btn ${h.schedule && h.schedule.length>0 && JSON.stringify(h.schedule)!=='[0,1,2,3,4]' && JSON.stringify(h.schedule)!=='[5,6]' ? 'btn-primary' : 'btn-ghost'} btn-sm"
+                onclick="setSchedule(this,'custom')">Свои дни</button>
+      </div>
+      <div id="dayPicker" style="display:none;flex-wrap:wrap;gap:5px;margin-top:8px"></div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Описание (необязательно)</label>
+      <input class="field-input" id="createDesc"
+             value="${esc(h.desc || '')}"
+             placeholder="Зачем эта привычка?">
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-ghost"
+              onclick="closeCreate()">Отмена</button>
+      <button type="button" class="btn btn-primary"
+              onclick="saveNewHabit()">Сохранить</button>
+    </div>`;
+
+  _buildIconGrid();
+  _buildCatGrid();
+
+  // Если свои дни — показываем пикер сразу
+  if (h.schedule && h.schedule.length > 0 &&
+      JSON.stringify(h.schedule) !== '[0,1,2,3,4]' &&
+      JSON.stringify(h.schedule) !== '[5,6]') {
+    const picker = document.getElementById('dayPicker');
+    if (picker) {
+      picker.style.display = 'flex';
+      const days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+      days.forEach((d, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = d;
+        btn.className = 'btn ' + (_createSchedule.includes(i) ? 'btn-primary' : 'btn-ghost');
+        btn.style.cssText = 'padding:5px 8px;font-size:12px;min-width:36px';
+        btn.onclick = () => {
+          const idx = _createSchedule.indexOf(i);
+          if (idx >= 0) _createSchedule.splice(idx, 1);
+          else _createSchedule.push(i);
+          _createSchedule.sort((a,b)=>a-b);
+          btn.className = 'btn ' + (_createSchedule.includes(i) ? 'btn-primary' : 'btn-ghost');
+          btn.style.cssText = 'padding:5px 8px;font-size:12px;min-width:36px';
+        };
+        picker.appendChild(btn);
+      });
+    }
+  }
+
   document.getElementById('createOverlay').classList.add('open');
   document.getElementById('createName').focus();
 }
@@ -344,6 +442,25 @@ function saveNewHabit() {
     return;
   }
   const desc = document.getElementById('createDesc')?.value.trim() || '';
+
+  // ── Редактирование существующей ──
+  if (_editingId) {
+    const h = habits.find(x => x.id === _editingId);
+    if (h) {
+      h.name     = name;
+      h.icon     = _createIcon;
+      h.category = _createCat;
+      h.desc     = desc;
+      h.schedule = _createType === 'bad' ? null : _createSchedule;
+      saveData();
+      renderAll();
+      showToast('✓ «' + name + '» обновлена');
+    }
+    closeCreate();
+    return;
+  }
+
+  // ── Создание новой ──
   const h = {
     id:        _uuid(),
     name,
@@ -370,6 +487,7 @@ function saveNewHabit() {
 function closeCreate(e) {
   if (e && e.target !== document.getElementById('createOverlay')) return;
   document.getElementById('createOverlay').classList.remove('open');
+  _editingId = null;
 }
 
 // ── Удаление и архив ──────────────────────

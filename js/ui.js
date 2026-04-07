@@ -268,6 +268,9 @@ function _buildHabitManageCard(h) {
       <div class="flex gap-6">
         <button type="button" class="btn btn-ghost"
                 style="font-size:12px;padding:5px 10px"
+                onclick="openEdit('${h.id}')">Изменить</button>
+        <button type="button" class="btn btn-ghost"
+                style="font-size:12px;padding:5px 10px"
                 onclick="openDelete('${h.id}')">Удалить</button>
       </div>
     </div>

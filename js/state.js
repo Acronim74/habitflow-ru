@@ -17,6 +17,7 @@ let _createIcon     = '⭐';
 let _createCat      = '';
 let _createSchedule = null;   // null = каждый день
                                // [] = кастомные дни недели (0=Пн..6=Вс)
+let _editingId = null; // id редактируемой привычки, null = создание новой
 
 // ── Сохранение ─────────────────────────────
 function saveData() {
