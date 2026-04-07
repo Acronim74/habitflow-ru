@@ -77,7 +77,7 @@ function toggleCheck(habitId) {
     const fallbackTimer = setTimeout(() => {
       el.removeEventListener('transitionend', onEnd);
       finish();
-    }, 3500);
+    }, 2500);
     return;
   }
 

@@ -391,7 +391,7 @@ body {
   cursor: default;
   user-select: none;
   transform-style: preserve-3d;
-  transition: transform 3s cubic-bezier(0.45, 0, 0.55, 1);
+  transition: transform 2s cubic-bezier(0.45, 0, 0.55, 1);
   min-height: 68px;
 }
 .bcard:active   { transform: scale(0.99); }
@@ -1013,7 +1013,7 @@ body {
 .hcard {
   transform-style: preserve-3d;
   /* Ровнее скорость по времени — резкий ease-out к концу выглядел как «дёрганье» */
-  transition: transform 3s cubic-bezier(0.45, 0, 0.55, 1),
+  transition: transform 2s cubic-bezier(0.45, 0, 0.55, 1),
               border-color 0.65s ease;
   position: relative;
   min-height: 72px;
