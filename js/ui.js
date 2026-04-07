@@ -119,6 +119,31 @@ function renderHabits() {
             </button>
           </div>
         </div>
+
+        ${archived.length > 0 ? `
+          <div style="margin-top:24px;padding-top:16px;
+                      border-top:0.5px solid var(--border)">
+            <button type="button"
+                    onclick="toggleArchiveSection()"
+                    style="display:flex;justify-content:space-between;
+                           align-items:center;width:100%;background:transparent;
+                           border:none;cursor:pointer;padding:0;font-family:inherit">
+              <div>
+                <div style="font-size:14px;font-weight:500;color:var(--text1)">
+                  Архив
+                </div>
+                <div style="font-size:12px;color:var(--text3);margin-top:2px">
+                  ${archived.length} привычек
+                </div>
+              </div>
+              <div id="archiveChevron"
+                   style="font-size:16px;color:var(--text3);
+                          transition:transform .2s">▾</div>
+            </button>
+            <div id="archiveList"
+                 style="display:none;flex-direction:column;
+                        gap:8px;margin-top:12px"></div>
+          </div>` : ''}
       </div>
       <div></div>
     </div>`;
@@ -131,6 +156,72 @@ function renderHabits() {
     const card = _buildHabitManageCard(h);
     document.getElementById('hgBadList')?.appendChild(card);
   });
+
+  if (archived.length > 0) {
+    const archiveList = document.getElementById('archiveList');
+    if (archiveList) {
+      archived.forEach(h => {
+        const card = _buildArchivedCard(h);
+        archiveList.appendChild(card);
+      });
+    }
+  }
+}
+
+function toggleArchiveSection() {
+  const list     = document.getElementById('archiveList');
+  const chevron  = document.getElementById('archiveChevron');
+  if (!list) return;
+  const isOpen = list.style.display === 'flex';
+  list.style.display    = isOpen ? 'none' : 'flex';
+  list.style.flexDirection = 'column';
+  if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
+function _buildArchivedCard(h) {
+  const div = document.createElement('div');
+  div.className = 'panel panel-body';
+  div.style.cssText = 'cursor:default;opacity:0.7';
+  div.innerHTML = `
+    <div class="flex" style="justify-content:space-between;align-items:flex-start">
+      <div class="flex gap-8 items-center">
+        <span style="font-size:20px">${h.icon || '⭐'}</span>
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text1)">
+            ${esc(h.name)}
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">
+            ${h.bad ? '🚫 Вредная' : '✅ Полезная'}
+            ${esc(scheduleLabel(h))}
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-6">
+        <button type="button" class="btn btn-ghost"
+                style="font-size:12px;padding:5px 10px"
+                onclick="restoreHabit('${h.id}')">
+          Восстановить
+        </button>
+        <button type="button" class="btn btn-ghost"
+                style="font-size:12px;padding:5px 10px;color:var(--bad);
+                       border-color:var(--bad-light)"
+                onclick="confirmDeleteArchived('${h.id}')">
+          Удалить
+        </button>
+      </div>
+    </div>`;
+  return div;
+}
+
+function confirmDeleteArchived(habitId) {
+  const h = archived.find(x => x.id === habitId);
+  if (!h) return;
+  const ok = confirm('Удалить «' + h.name + '» из архива?\nВся история будет удалена безвозвратно.');
+  if (!ok) return;
+  archived = archived.filter(x => x.id !== habitId);
+  saveData();
+  renderHabits();
+  showToast('Привычка удалена из архива');
 }
 
 function toggleMood() {
