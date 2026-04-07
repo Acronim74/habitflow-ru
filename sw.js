@@ -1,4 +1,4 @@
-const CACHE = 'habitflow-v1';
+const CACHE = 'habitflow-v2';
 
 const ASSETS = [
   '/habitflow/',
@@ -24,21 +24,39 @@ self.addEventListener('install', e => {
   self.skipWaiting();
 });
 
-// Активация — удаляем старые кэши
+// Активация — удаляем старые кэши и сразу берём контроль
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-// Fetch — сначала кэш, потом сеть
+// Fetch — сначала сеть, при офлайн берём из кэша
 self.addEventListener('fetch', e => {
+  // Только GET запросы
+  if (e.request.method !== 'GET') return;
+
   e.respondWith(
-    caches.match(e.request).then(cached => {
-      return cached || fetch(e.request).catch(() => caches.match('/habitflow/index.html'));
-    })
+    fetch(e.request)
+      .then(response => {
+        // Сохраняем свежую версию в кэш
+        if (response && response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE).then(cache => cache.put(e.request, clone));
+        }
+        return response;
+      })
+      .catch(() => {
+        // Офлайн — берём из кэша
+        return caches.match(e.request)
+          .then(cached => cached || caches.match('/habitflow/index.html'));
+      })
   );
+});
+
+// Слушаем сообщение SKIP_WAITING от клиента
+self.addEventListener('message', e => {
+  if (e.data === 'SKIP_WAITING') self.skipWaiting();
 });

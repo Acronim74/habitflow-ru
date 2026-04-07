@@ -352,14 +352,6 @@
 <script src="js/render.js"></script>
 <script src="js/actions.js"></script>
 <script src="js/ui.js"></script>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/habitflow/sw.js')
-      .catch(err => console.log('SW error:', err));
-  });
-}
-</script>
 
 </body>
 </html>

@@ -1718,4 +1718,32 @@ document.addEventListener('DOMContentLoaded', () => {
   navigate('today');
   renderNav();
   checkBadges();
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/habitflow/sw.js')
+        .then(reg => {
+          // Проверяем обновления каждый раз при открытии
+          reg.update();
+
+          // Когда новый SW готов — перезагружаем страницу
+          reg.addEventListener('updatefound', () => {
+            const newSW = reg.installing;
+            if (!newSW) return;
+            newSW.addEventListener('statechange', () => {
+              if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+                // Новая версия готова — тихо применяем
+                newSW.postMessage('SKIP_WAITING');
+              }
+            });
+          });
+        })
+        .catch(err => console.log('SW error:', err));
+
+      // Перезагружаем когда SW поменялся
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      });
+    });
+  }
 });
