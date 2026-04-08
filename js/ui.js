@@ -1684,6 +1684,32 @@ function closeGuide(e) {
   if (el) el.classList.remove('open');
 }
 
+// ── Бургер-меню ────────────────────────────
+
+function toggleBurger() {
+  const drawer  = document.getElementById('burgerDrawer');
+  const overlay = document.getElementById('burgerOverlay');
+  const btn     = document.getElementById('burgerBtn');
+  if (!drawer) return;
+  const isOpen = drawer.classList.contains('open');
+  if (isOpen) {
+    closeBurger();
+  } else {
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+function closeBurger() {
+  const drawer  = document.getElementById('burgerDrawer');
+  const overlay = document.getElementById('burgerOverlay');
+  const btn     = document.getElementById('burgerBtn');
+  if (drawer)  drawer.classList.remove('open');
+  if (overlay) overlay.classList.remove('open');
+  if (btn)     btn.classList.remove('open');
+}
+
 // ── Инициализация ─────────────────────────
 
 function setTheme(theme, save = true) {

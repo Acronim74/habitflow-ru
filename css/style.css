@@ -122,21 +122,6 @@ body {
   gap: 8px;
   flex-shrink: 0;
 }
-.nav-action {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--r-sm);
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.5;
-  transition: opacity .15s, background .15s;
-}
-.nav-action:hover { opacity: 1; background: var(--bg); }
 
 .nav-avatar {
   display: flex;
@@ -1200,9 +1185,9 @@ body {
   /* На телефоне оставляем только action-иконки, аватар скрываем */
   .nav-right { display: flex; gap: 4px; }
   .nav-avatar { display: none; }
-  .nav-action {
-    width: 30px;
-    height: 30px;
+  .burger-btn {
+    width: 34px;
+    height: 34px;
   }
 
   /* Нижняя навигация — включаем */
@@ -1487,48 +1472,6 @@ body {
 [data-theme="blade"] .hm-cell.lv4 {
   box-shadow: 0 0 6px #c87a22;
 }
-
-/* ── Переключатель тем ────────────────────── */
-.theme-switcher {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  background: var(--bg);
-  border: 0.5px solid var(--border);
-  border-radius: 20px;
-  padding: 3px;
-}
-
-.theme-btn {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  background: transparent;
-  transition: background .15s, opacity .15s;
-  line-height: 1;
-  opacity: 0.5;
-  color: inherit;
-}
-
-.theme-btn.active {
-  opacity: 1;
-}
-
-.theme-btn:hover:not(.active) {
-  opacity: 0.8;
-}
-
-/* Фиксированные цвета — не зависят от темы */
-.theme-btn[data-theme="light"]  { color: #e8a020; }
-.theme-btn[data-theme="dark"]   { color: #aaaaaa; }
-.theme-btn[data-theme="tron"]   { color: #00c8ff; }
-.theme-btn[data-theme="blade"]  { color: #c87a22; }
 
 /* ── Онбординг-мастер ─────────────────────── */
 .ob-overlay {
@@ -1965,3 +1908,155 @@ body {
   transition: opacity .15s;
 }
 .ob-btn-demo:hover { opacity: .85; }
+
+/* ── Бургер-кнопка ────────────────────────── */
+.burger-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  border: 0.5px solid var(--border);
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: background .15s;
+  flex-shrink: 0;
+}
+
+.burger-btn:hover { background: var(--bg); }
+
+.burger-btn.open { background: var(--bg); border-color: var(--border2); }
+
+.burger-line {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  background: var(--text2);
+  border-radius: 1px;
+  transition: transform .2s, opacity .2s;
+}
+
+/* Анимация в крестик когда открыто */
+.burger-btn.open .burger-line:nth-child(1) {
+  transform: translateY(5.5px) rotate(45deg);
+}
+.burger-btn.open .burger-line:nth-child(2) {
+  opacity: 0;
+}
+.burger-btn.open .burger-line:nth-child(3) {
+  transform: translateY(-5.5px) rotate(-45deg);
+}
+
+/* ── Оверлей ──────────────────────────────── */
+.burger-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  background: rgba(0,0,0,.15);
+}
+.burger-overlay.open { display: block; }
+
+/* ── Дровер ───────────────────────────────── */
+.burger-drawer {
+  position: fixed;
+  top: 52px;
+  right: 0;
+  width: 220px;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 0 0 0 var(--r-lg);
+  z-index: 200;
+  box-shadow: -2px 4px 20px rgba(0,0,0,.08);
+  transform: translateY(-8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .2s cubic-bezier(.4,0,.2,1),
+              opacity .2s ease;
+}
+.burger-drawer.open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.burger-section {
+  padding: 4px 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.burger-section:last-child { border-bottom: none; }
+
+.burger-section-title {
+  font-size: 10px;
+  color: var(--text4);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  padding: 7px 16px 3px;
+}
+
+.burger-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--text1);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background .1s;
+}
+.burger-item:hover { background: var(--bg); }
+
+.burger-item-ico {
+  font-size: 15px;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* Темы внутри дровера */
+.burger-theme-row {
+  display: flex;
+  gap: 6px;
+  padding: 6px 16px 10px;
+}
+
+.burger-theme-row .theme-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background: var(--bg);
+  transition: border-color .15s, transform .1s;
+  opacity: 0.6;
+}
+.burger-theme-row .theme-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.08);
+}
+.burger-theme-row .theme-btn.active {
+  opacity: 1;
+  border-color: var(--accent);
+}
+.burger-theme-row .theme-btn[data-theme="light"]  { color: #e8a020; }
+.burger-theme-row .theme-btn[data-theme="dark"]   { color: #aaaaaa; }
+.burger-theme-row .theme-btn[data-theme="tron"]   { color: #00c8ff; }
+.burger-theme-row .theme-btn[data-theme="blade"]  { color: #c87a22; }
+
+/* На ПК — аватар виден, бургер тоже */
+/* На планшете и телефоне — аватар скрыт, бургер виден */
+@media (max-width: 900px) {
+  .nav-avatar { display: none; }
+}

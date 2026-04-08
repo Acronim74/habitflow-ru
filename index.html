@@ -57,33 +57,78 @@
     </div>
 
     <div class="nav-right">
-      <button class="nav-action" type="button" title="Сохранить копию"
-              onclick="exportData()">💾</button>
-      <button class="nav-action" type="button" title="Загрузить копию"
-              onclick="triggerImport()">📂</button>
-      <button class="nav-action" type="button" title="Знакомство с приложением"
-              onclick="openOnboarding()">🎓</button>
-      <button class="nav-action" type="button" title="Помощь"
-              onclick="openGuide()">❓</button>
-      <!-- Переключатель тем -->
-      <div class="theme-switcher" id="themeSwitcher">
-        <button type="button" class="theme-btn active"
-                data-theme="light" onclick="setTheme('light')"
-                title="Светлая">☀️</button>
-        <button type="button" class="theme-btn"
-                data-theme="dark" onclick="setTheme('dark')"
-                title="Тёмная">🌙</button>
-        <button type="button" class="theme-btn"
-                data-theme="tron" onclick="setTheme('tron')"
-                title="Трон">◈</button>
-        <button type="button" class="theme-btn"
-                data-theme="blade" onclick="setTheme('blade')"
-                title="Blade Runner">◉</button>
-      </div>
+
+      <!-- Аватар (только ПК) -->
       <button class="nav-avatar" type="button" onclick="navigate('badges')">
         <div class="nav-av-pic" id="navAvPic">🌱</div>
-        <span class="nav-av-text" id="navAvText">Искатель · 0 pts</span>
+        <span class="nav-av-text" id="navAvText">Начало · 0 pts</span>
       </button>
+
+      <!-- Бургер-кнопка -->
+      <button class="burger-btn" type="button"
+              onclick="toggleBurger()" id="burgerBtn"
+              title="Меню">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </button>
+
+    </div>
+
+    <!-- Бургер-меню (дровер) -->
+    <div class="burger-overlay" id="burgerOverlay"
+         onclick="closeBurger()"></div>
+
+    <div class="burger-drawer" id="burgerDrawer">
+
+      <!-- Тема -->
+      <div class="burger-section">
+        <div class="burger-section-title">Тема</div>
+        <div class="burger-theme-row">
+          <button type="button" class="theme-btn active"
+                  data-theme="light" onclick="setTheme('light')"
+                  title="Светлая">☀️</button>
+          <button type="button" class="theme-btn"
+                  data-theme="dark" onclick="setTheme('dark')"
+                  title="Тёмная">🌙</button>
+          <button type="button" class="theme-btn"
+                  data-theme="tron" onclick="setTheme('tron')"
+                  title="Трон">◈</button>
+          <button type="button" class="theme-btn"
+                  data-theme="blade" onclick="setTheme('blade')"
+                  title="Blade Runner">◉</button>
+        </div>
+      </div>
+
+      <!-- Данные -->
+      <div class="burger-section">
+        <div class="burger-section-title">Данные</div>
+        <button type="button" class="burger-item"
+                onclick="exportData();closeBurger()">
+          <span class="burger-item-ico">💾</span>
+          <span>Сохранить копию</span>
+        </button>
+        <button type="button" class="burger-item"
+                onclick="triggerImport();closeBurger()">
+          <span class="burger-item-ico">📂</span>
+          <span>Загрузить копию</span>
+        </button>
+      </div>
+
+      <!-- Прочее -->
+      <div class="burger-section">
+        <button type="button" class="burger-item"
+                onclick="openOnboarding();closeBurger()">
+          <span class="burger-item-ico">🎓</span>
+          <span>Знакомство с приложением</span>
+        </button>
+        <button type="button" class="burger-item"
+                onclick="openGuide();closeBurger()">
+          <span class="burger-item-ico">❓</span>
+          <span>Помощь</span>
+        </button>
+      </div>
+
     </div>
 
     <input type="file" id="importFile" accept=".json,.html"
