@@ -566,6 +566,55 @@ body {
   flex-shrink: 0;
 }
 
+/* ── Сегментный индикатор ─────────────────── */
+.seg-bar {
+  height: 22px;
+  border-radius: var(--r-sm);
+  background: var(--border);
+  color: var(--text4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 500;
+  transition: background .3s ease, color .2s ease;
+}
+
+/* Строка дашборда */
+.dash-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* Карточка индикатора */
+.dash-gauge-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Карточка стрика */
+.dash-streak-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Настроение компактно */
+.mood-compact-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.mood-compact-row .mood-row {
+  flex: 1;
+  justify-content: space-between;
+}
+
 /* ── Спидометр ────────────────────────────── */
 .donut-meta {
   font-size: 12px;
@@ -1248,26 +1297,69 @@ body {
     gap: 10px;
   }
 
-  /* Левая колонка (todayLeft): горизонтальная компоновка */
+  /* Телефон: две карточки рядом */
   #todayLeft {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    align-items: start;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
-  /* Стрик + настроение — правая половина левой карточки */
+  #todayLeft .panel-title {
+    font-size: 9px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+
+  /* Строка: индикатор + стрик рядом */
+  #todayLeft .dash-row {
+    flex-direction: row;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  /* Индикатор — левая карточка */
+  #todayLeft .dash-gauge-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 10px;
+    flex: 0 0 96px;
+  }
+
+  /* Блоки чуть меньше на телефоне */
+  #todayLeft .seg-bar {
+    height: 18px;
+    font-size: 9px;
+  }
+
+  /* Стрик — правая карточка */
+  #todayLeft .dash-streak-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 10px 12px;
+    flex: 1;
+    justify-content: space-around;
+  }
+
   #todayLeft .divider { display: none; }
+  #todayLeft .dash-streak-card .divider { display: block; }
 
-  /* Настроение в Today: отдельный ряд на всю ширину */
+  /* Настроение — горизонтальная карточка на всю ширину */
   #todayLeft #moodSection {
-    grid-column: 1 / -1;
-    margin-top: 2px;
+    display: block !important;
   }
 
-  #todayLeft #moodSection .divider {
-    display: block;
+  #todayLeft .mood-compact-row {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 10px 14px;
   }
+
+  #todayLeft #moodSection .divider { display: none; }
 
   /* Правая колонка: одна колонка */
   #todayRight {

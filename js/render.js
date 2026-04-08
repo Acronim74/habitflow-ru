@@ -1,13 +1,16 @@
-// ── Прогресс дня (горизонтальный) ──────────
+// ── Сегментный прогресс дня ─────────────────
+
+const _SEG_LEVELS = [20, 40, 60, 80, 100];
+const _SEG_COLORS = ['#95d5b2', '#74c69d', '#52b788', '#2d6a4f', '#1a4d38'];
 
 let _gaugeCurrentPct = 0;
 let _gaugeTargetPct  = 0;
 let _gaugeRafId      = null;
 
 function _animateGauge(pct) {
-  _gaugeTargetPct = pct;
+  _gaugeTargetPct = Math.round(pct);
   if (_gaugeRafId) cancelAnimationFrame(_gaugeRafId);
-  _gaugeStep();
+  _gaugeRafId = requestAnimationFrame(_gaugeStep);
 }
 
 function _gaugeStep() {
@@ -15,29 +18,39 @@ function _gaugeStep() {
   if (Math.abs(diff) < 0.5) {
     _gaugeCurrentPct = _gaugeTargetPct;
     _drawGauge(_gaugeCurrentPct);
+    _gaugeRafId = null;
     return;
   }
-  _gaugeCurrentPct += diff * 0.14;
+  _gaugeCurrentPct += diff * 0.18;
   _drawGauge(_gaugeCurrentPct);
   _gaugeRafId = requestAnimationFrame(_gaugeStep);
 }
 
 function _drawGauge(pct) {
   const val = Math.round(pct);
-  const barFill = document.getElementById('gaugeBarFill');
-  if (barFill) {
-    barFill.style.width = Math.max(0, Math.min(120, val)) + '%';
-    barFill.style.background =
-      val > 100 ? 'linear-gradient(90deg, var(--accent) 0%, var(--hm-lv4) 100%)' : 'var(--accent)';
-  }
+  const wrap = document.getElementById('segWrap');
+  if (!wrap) return;
+
+  // Обновляем каждый сегмент
+  _SEG_LEVELS.forEach((threshold, i) => {
+    const seg = document.getElementById('seg-' + threshold);
+    if (!seg) return;
+    const isActive = val >= threshold;
+    seg.style.background = isActive
+      ? _SEG_COLORS[i]
+      : 'var(--border)';
+    seg.style.color = isActive
+      ? (threshold <= 20 ? 'var(--accent)' : 'white')
+      : 'var(--text4)';
+  });
+
+  // Обновляем большой процент
   const pctEl = document.getElementById('gaugePct');
   if (pctEl) {
     pctEl.textContent = val + '%';
-    pctEl.style.color = val >= 100 ? 'var(--hm-lv4)' : 'var(--text1)';
-  }
-  const lblEl = document.getElementById('gaugeLbl');
-  if (lblEl) {
-    lblEl.textContent = val > 100 ? 'с бонусами' : 'выполнено';
+    pctEl.style.color = val >= 100
+      ? 'var(--accent)'
+      : 'var(--text1)';
   }
 }
 
