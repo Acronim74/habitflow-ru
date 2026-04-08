@@ -105,9 +105,18 @@
         </div>
       </div>
 
-      <!-- Виджеты (главный экран): как карточки слева — личный рекорд → серия → настроение -->
+      <!-- Виджеты (главный экран): прогресс дня → рекорд → серия → настроение -->
       <div class="burger-section">
         <div class="burger-section-title">Виджеты</div>
+        <div class="burger-widget-row">
+          <span class="burger-widget-ico" aria-hidden="true">📊</span>
+          <span class="burger-widget-label">Прогресс дня</span>
+          <button type="button" class="burger-widget-toggle" id="dayProgressWidgetToggleBurger"
+                  onclick="toggleDayProgressWidget()"
+                  aria-label="Показывать карточку «Прогресс дня» на экране «Сегодня»">
+            <span class="mood-toggle-knob"></span>
+          </button>
+        </div>
         <div class="burger-widget-row">
           <span class="burger-widget-ico" aria-hidden="true">🏆</span>
           <span class="burger-widget-label">Личный рекорд</span>
@@ -209,7 +218,7 @@
         <div class="panel-title">Сегодня</div>
 
         <!-- Карточка прогресса дня (отдельно, над стриком) -->
-        <div class="dash-gauge-card dash-gauge-card--top">
+        <div id="dayProgressSection" class="dash-gauge-card dash-gauge-card--top">
           <div id="segWrap" style="display:flex;flex-direction:column;gap:3px;width:100%">
             <div id="seg-100" class="seg-bar">100%</div>
             <div id="seg-80"  class="seg-bar">80%</div>

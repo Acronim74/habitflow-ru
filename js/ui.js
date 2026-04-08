@@ -74,6 +74,7 @@ function renderAll() {
   renderNav();
   renderScreen();
   _syncMoodToggleUI();
+  _syncDayProgressWidgetToggleUI();
   _syncBestStreakWidgetToggleUI();
   _syncSeriesWidgetToggleUI();
 }
@@ -89,6 +90,17 @@ function _syncMoodToggleUI() {
     if (knob) knob.style.left = on ? '23px' : '3px';
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
+}
+
+/** Переключатель карточки «Прогресс дня» в меню «Виджеты». */
+function _syncDayProgressWidgetToggleUI() {
+  const on = dayProgressWidgetEnabled;
+  const btn = document.getElementById('dayProgressWidgetToggleBurger');
+  if (!btn) return;
+  btn.style.background = on ? 'var(--accent)' : 'var(--border2)';
+  const knob = btn.querySelector('.mood-toggle-knob') || btn.firstElementChild;
+  if (knob) knob.style.left = on ? '23px' : '3px';
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
 }
 
 /** Переключатель карточки «Личный рекорд» в меню «Виджеты». */
@@ -309,6 +321,19 @@ function toggleMood() {
   }
 
   showToast(moodEnabled ? '😊 Дневник настроения включён' : 'Дневник настроения выключен');
+}
+
+function toggleDayProgressWidget() {
+  dayProgressWidgetEnabled = !dayProgressWidgetEnabled;
+  saveData();
+  _syncDayProgressWidgetToggleUI();
+  const dayProgressSection = document.getElementById('dayProgressSection');
+  if (dayProgressSection) {
+    dayProgressSection.classList.toggle('hidden', !dayProgressWidgetEnabled);
+  }
+  showToast(dayProgressWidgetEnabled
+    ? 'Карточка «Прогресс дня» на экране «Сегодня» включена'
+    : 'Карточка «Прогресс дня» скрыта');
 }
 
 function toggleBestStreakWidget() {
@@ -1839,6 +1864,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderNav();
   checkBadges();
   _syncMoodToggleUI();
+  _syncDayProgressWidgetToggleUI();
   _syncBestStreakWidgetToggleUI();
   _syncSeriesWidgetToggleUI();
 

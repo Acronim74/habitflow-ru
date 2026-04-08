@@ -5,6 +5,8 @@ let earnedBadges  = [];   // id полученных бейджей
 let gender        = null; // 'female' | 'male' | null
 let moodLog       = {};   // { "YYYY-MM-DD": 0..4 }
 let moodEnabled   = false; // дневник настроения вкл/выкл
+/** Карточка «Прогресс дня» (сегменты) на экране «Сегодня» */
+let dayProgressWidgetEnabled = true;
 /** Карточка «Личный рекорд» на экране «Сегодня» */
 let bestStreakWidgetEnabled = true;
 /** Карточка «Серия» на экране «Сегодня» (по умолчанию вкл.; в старых дампах ключа нет) */
@@ -34,6 +36,7 @@ function saveData() {
       gender,
       moodLog,
       moodEnabled,
+      dayProgressWidgetEnabled,
       bestStreakWidgetEnabled,
       seriesWidgetEnabled,
       savedAt: new Date().toISOString(),
@@ -57,6 +60,7 @@ function loadData() {
     gender       = d.gender || null;
     moodLog      = (d.moodLog && typeof d.moodLog === 'object') ? d.moodLog : {};
     moodEnabled  = d.moodEnabled || false;
+    dayProgressWidgetEnabled = d.dayProgressWidgetEnabled === undefined ? true : !!d.dayProgressWidgetEnabled;
     bestStreakWidgetEnabled = d.bestStreakWidgetEnabled === undefined ? true : !!d.bestStreakWidgetEnabled;
     seriesWidgetEnabled = d.seriesWidgetEnabled === undefined ? true : !!d.seriesWidgetEnabled;
     _migrateData();

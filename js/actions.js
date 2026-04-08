@@ -561,6 +561,7 @@ function exportData() {
     gender,
     moodLog,
     moodEnabled,
+    dayProgressWidgetEnabled,
     bestStreakWidgetEnabled,
     seriesWidgetEnabled,
     savedAt: new Date().toISOString(),
@@ -620,6 +621,7 @@ function importData(event) {
       gender       = d.gender       || null;
       moodLog      = (d.moodLog && typeof d.moodLog === 'object') ? d.moodLog : {};
       moodEnabled  = d.moodEnabled  || false;
+      dayProgressWidgetEnabled = d.dayProgressWidgetEnabled === undefined ? true : !!d.dayProgressWidgetEnabled;
       bestStreakWidgetEnabled = d.bestStreakWidgetEnabled === undefined ? true : !!d.bestStreakWidgetEnabled;
       seriesWidgetEnabled = d.seriesWidgetEnabled === undefined ? true : !!d.seriesWidgetEnabled;
 

@@ -123,6 +123,11 @@ function _renderTodayChrome() {
     document.getElementById('moodSection').classList.add('hidden');
   }
 
+  const dayProgressSection = document.getElementById('dayProgressSection');
+  if (dayProgressSection) {
+    dayProgressSection.classList.toggle('hidden', !dayProgressWidgetEnabled);
+  }
+
   const streakBestSection = document.getElementById('streakBestSection');
   if (streakBestSection) {
     streakBestSection.classList.toggle('hidden', !bestStreakWidgetEnabled);
@@ -189,6 +194,11 @@ function _renderTodayChromeForFlip() {
   });
   document.getElementById('streakVal').textContent  = bestS;
   document.getElementById('streakName').textContent = bestS > 0 ? bestName.trim() : '';
+
+  const dayProgressEl = document.getElementById('dayProgressSection');
+  if (dayProgressEl) {
+    dayProgressEl.classList.toggle('hidden', !dayProgressWidgetEnabled);
+  }
 
   const streakBestEl = document.getElementById('streakBestSection');
   if (streakBestEl) {
