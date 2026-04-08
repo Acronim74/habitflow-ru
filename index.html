@@ -105,9 +105,27 @@
         </div>
       </div>
 
-      <!-- Виджеты (главный экран) -->
+      <!-- Виджеты (главный экран): как карточки слева — личный рекорд → серия → настроение -->
       <div class="burger-section">
         <div class="burger-section-title">Виджеты</div>
+        <div class="burger-widget-row">
+          <span class="burger-widget-ico" aria-hidden="true">🏆</span>
+          <span class="burger-widget-label">Личный рекорд</span>
+          <button type="button" class="burger-widget-toggle" id="bestStreakWidgetToggleBurger"
+                  onclick="toggleBestStreakWidget()"
+                  aria-label="Показывать карточку «Личный рекорд» на экране «Сегодня»">
+            <span class="mood-toggle-knob"></span>
+          </button>
+        </div>
+        <div class="burger-widget-row">
+          <span class="burger-widget-ico" aria-hidden="true">🔥</span>
+          <span class="burger-widget-label">Серия</span>
+          <button type="button" class="burger-widget-toggle" id="seriesWidgetToggleBurger"
+                  onclick="toggleSeriesWidget()"
+                  aria-label="Показывать карточку «Серия» на экране «Сегодня»">
+            <span class="mood-toggle-knob"></span>
+          </button>
+        </div>
         <div class="burger-widget-row">
           <span class="burger-widget-ico" aria-hidden="true">😊</span>
           <span class="burger-widget-label">Настроение</span>
@@ -208,7 +226,7 @@
         </div>
 
         <!-- Личный рекорд (дней подряд; между прогрессом и серией) -->
-        <div class="dash-streak-card dash-streak-card--best">
+        <div id="streakBestSection" class="dash-streak-card dash-streak-card--best">
           <div class="dash-streak-best-line">
             <span class="dash-streak-best-lbl">Личный рекорд</span>
             <span class="dash-streak-best-val">
@@ -218,7 +236,7 @@
         </div>
 
         <!-- Серия (название привычки; длинное — переносится) -->
-        <div class="dash-streak-card dash-streak-card--series">
+        <div id="streakSeriesSection" class="dash-streak-card dash-streak-card--series">
           <div class="dash-streak-series-line">
             <span class="dash-streak-series-lbl">Серия</span>
             <span class="dash-streak-series-val" id="streakName">—</span>

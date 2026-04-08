@@ -123,6 +123,16 @@ function _renderTodayChrome() {
     document.getElementById('moodSection').classList.add('hidden');
   }
 
+  const streakBestSection = document.getElementById('streakBestSection');
+  if (streakBestSection) {
+    streakBestSection.classList.toggle('hidden', !bestStreakWidgetEnabled);
+  }
+
+  const streakSeriesSection = document.getElementById('streakSeriesSection');
+  if (streakSeriesSection) {
+    streakSeriesSection.classList.toggle('hidden', !seriesWidgetEnabled);
+  }
+
   document.getElementById('goodBadge').textContent =
     done + ' из ' + scheduled.length +
     (bonusDone > 0 ? ' +' + bonusDone : '');
@@ -179,6 +189,16 @@ function _renderTodayChromeForFlip() {
   });
   document.getElementById('streakVal').textContent  = bestS;
   document.getElementById('streakName').textContent = bestS > 0 ? bestName.trim() : '';
+
+  const streakBestEl = document.getElementById('streakBestSection');
+  if (streakBestEl) {
+    streakBestEl.classList.toggle('hidden', !bestStreakWidgetEnabled);
+  }
+
+  const streakSeriesEl = document.getElementById('streakSeriesSection');
+  if (streakSeriesEl) {
+    streakSeriesEl.classList.toggle('hidden', !seriesWidgetEnabled);
+  }
 
   document.getElementById('goodBadge').textContent =
     done + ' из ' + scheduled.length +

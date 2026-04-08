@@ -5,6 +5,10 @@ let earnedBadges  = [];   // id полученных бейджей
 let gender        = null; // 'female' | 'male' | null
 let moodLog       = {};   // { "YYYY-MM-DD": 0..4 }
 let moodEnabled   = false; // дневник настроения вкл/выкл
+/** Карточка «Личный рекорд» на экране «Сегодня» */
+let bestStreakWidgetEnabled = true;
+/** Карточка «Серия» на экране «Сегодня» (по умолчанию вкл.; в старых дампах ключа нет) */
+let seriesWidgetEnabled = true;
 let currentScreen = 'today';
 let cleanTodaySet = new Set(); // runtime only, не сохраняется
 
@@ -30,6 +34,8 @@ function saveData() {
       gender,
       moodLog,
       moodEnabled,
+      bestStreakWidgetEnabled,
+      seriesWidgetEnabled,
       savedAt: new Date().toISOString(),
     };
     localStorage.setItem(LS_KEY, JSON.stringify(data));
@@ -51,6 +57,8 @@ function loadData() {
     gender       = d.gender || null;
     moodLog      = (d.moodLog && typeof d.moodLog === 'object') ? d.moodLog : {};
     moodEnabled  = d.moodEnabled || false;
+    bestStreakWidgetEnabled = d.bestStreakWidgetEnabled === undefined ? true : !!d.bestStreakWidgetEnabled;
+    seriesWidgetEnabled = d.seriesWidgetEnabled === undefined ? true : !!d.seriesWidgetEnabled;
     _migrateData();
     _syncCleanTodaySetFromData();
   } catch (e) {

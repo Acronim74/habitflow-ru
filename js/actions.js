@@ -561,6 +561,8 @@ function exportData() {
     gender,
     moodLog,
     moodEnabled,
+    bestStreakWidgetEnabled,
+    seriesWidgetEnabled,
     savedAt: new Date().toISOString(),
   }, null, 2);
   const blob = new Blob([data], { type: 'application/json' });
@@ -618,6 +620,8 @@ function importData(event) {
       gender       = d.gender       || null;
       moodLog      = (d.moodLog && typeof d.moodLog === 'object') ? d.moodLog : {};
       moodEnabled  = d.moodEnabled  || false;
+      bestStreakWidgetEnabled = d.bestStreakWidgetEnabled === undefined ? true : !!d.bestStreakWidgetEnabled;
+      seriesWidgetEnabled = d.seriesWidgetEnabled === undefined ? true : !!d.seriesWidgetEnabled;
 
       _migrateData();
       _syncCleanTodaySetFromData();

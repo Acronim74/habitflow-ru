@@ -74,6 +74,8 @@ function renderAll() {
   renderNav();
   renderScreen();
   _syncMoodToggleUI();
+  _syncBestStreakWidgetToggleUI();
+  _syncSeriesWidgetToggleUI();
 }
 
 /** Синхронизирует переключатель дневника настроения: вкладка «Привычки» и меню «Виджеты». */
@@ -87,6 +89,28 @@ function _syncMoodToggleUI() {
     if (knob) knob.style.left = on ? '23px' : '3px';
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
+}
+
+/** Переключатель карточки «Личный рекорд» в меню «Виджеты». */
+function _syncBestStreakWidgetToggleUI() {
+  const on = bestStreakWidgetEnabled;
+  const btn = document.getElementById('bestStreakWidgetToggleBurger');
+  if (!btn) return;
+  btn.style.background = on ? 'var(--accent)' : 'var(--border2)';
+  const knob = btn.querySelector('.mood-toggle-knob') || btn.firstElementChild;
+  if (knob) knob.style.left = on ? '23px' : '3px';
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+}
+
+/** Переключатель карточки «Серия» в меню «Виджеты». */
+function _syncSeriesWidgetToggleUI() {
+  const on = seriesWidgetEnabled;
+  const btn = document.getElementById('seriesWidgetToggleBurger');
+  if (!btn) return;
+  btn.style.background = on ? 'var(--accent)' : 'var(--border2)';
+  const knob = btn.querySelector('.mood-toggle-knob') || btn.firstElementChild;
+  if (knob) knob.style.left = on ? '23px' : '3px';
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
 }
 
 // ── Экран Привычки ────────────────────────
@@ -285,6 +309,32 @@ function toggleMood() {
   }
 
   showToast(moodEnabled ? '😊 Дневник настроения включён' : 'Дневник настроения выключен');
+}
+
+function toggleBestStreakWidget() {
+  bestStreakWidgetEnabled = !bestStreakWidgetEnabled;
+  saveData();
+  _syncBestStreakWidgetToggleUI();
+  const streakBestSection = document.getElementById('streakBestSection');
+  if (streakBestSection) {
+    streakBestSection.classList.toggle('hidden', !bestStreakWidgetEnabled);
+  }
+  showToast(bestStreakWidgetEnabled
+    ? 'Карточка «Личный рекорд» на экране «Сегодня» включена'
+    : 'Карточка «Личный рекорд» скрыта');
+}
+
+function toggleSeriesWidget() {
+  seriesWidgetEnabled = !seriesWidgetEnabled;
+  saveData();
+  _syncSeriesWidgetToggleUI();
+  const streakSeriesSection = document.getElementById('streakSeriesSection');
+  if (streakSeriesSection) {
+    streakSeriesSection.classList.toggle('hidden', !seriesWidgetEnabled);
+  }
+  showToast(seriesWidgetEnabled
+    ? 'Карточка «Серия» на экране «Сегодня» включена'
+    : 'Карточка «Серия» скрыта');
 }
 
 function _buildHabitManageCard(h) {
@@ -1738,6 +1788,7 @@ function toggleBurger() {
     overlay.classList.add('open');
     btn.classList.add('open');
     _syncMoodToggleUI();
+    _syncSeriesWidgetToggleUI();
   }
 }
 
@@ -1788,6 +1839,8 @@ document.addEventListener('DOMContentLoaded', () => {
   renderNav();
   checkBadges();
   _syncMoodToggleUI();
+  _syncBestStreakWidgetToggleUI();
+  _syncSeriesWidgetToggleUI();
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
