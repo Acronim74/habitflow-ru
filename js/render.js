@@ -87,10 +87,12 @@ function _renderTodayChrome() {
   const scheduled = good.filter(h => _isWorkDay(h, tk));
   const bonuses   = good.filter(h => !_isWorkDay(h, tk));
 
-  document.getElementById('todayDate').textContent =
-    TODAY.toLocaleDateString('ru-RU', {
+  const dateEl = document.getElementById('todayDate');
+  if (dateEl) {
+    dateEl.textContent = TODAY.toLocaleDateString('ru-RU', {
       weekday: 'long', day: 'numeric', month: 'long'
     });
+  }
 
   const schedTotal = scheduled.length || 1;
   const done  = scheduled.filter(h => h.checks?.[tk]).length;

@@ -13,6 +13,34 @@ const _OB_HEADINGS = [
   'ТВОИ ДАННЫЕ',
 ];
 
+function _updateTopBarMeta() {
+  const screenEl = document.getElementById('navScreenName');
+  const mainEl   = document.getElementById('navDateMain');
+  const weekEl   = document.getElementById('navDateWeek');
+  const legacyEl = document.getElementById('todayDate');
+
+  const map = {
+    today: 'Сегодня',
+    habits: 'Привычки',
+    analytics: 'Аналитика',
+    badges: 'Значки',
+  };
+  const d = new Date();
+  const dateMain = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+  const dateWeek = d.toLocaleDateString('ru-RU', { weekday: 'long' });
+
+  if (screenEl) screenEl.textContent = map[currentScreen] || 'Сегодня';
+  if (mainEl) mainEl.textContent = dateMain;
+  if (weekEl) weekEl.textContent = dateWeek;
+
+  // Совместимость со старым id (если он где-то останется)
+  if (legacyEl) {
+    legacyEl.textContent = d.toLocaleDateString('ru-RU', {
+      weekday: 'long', day: 'numeric', month: 'long',
+    });
+  }
+}
+
 function navigate(screen) {
   currentScreen = screen;
 
@@ -31,6 +59,7 @@ function navigate(screen) {
   const el = document.getElementById(id);
   if (el) el.classList.add('active');
 
+  _updateTopBarMeta();
   renderScreen();
 }
 

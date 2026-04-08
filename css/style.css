@@ -94,6 +94,23 @@ body {
   font-size: 15px;
   font-weight: 500;
 }
+.nav-mobile-screen {
+  display: none;
+}
+.nav-mobile-date {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-left: 8px;
+}
+.nav-mobile-date-main {
+  font-size: 11px;
+  color: var(--text3);
+  white-space: nowrap;
+}
+.nav-mobile-date-week {
+  display: none;
+}
 
 .nav-tabs {
   display: flex;
@@ -1230,9 +1247,71 @@ body {
     justify-content: space-between;
     transform: translateZ(0);
   }
+  .topnav-inner {
+    gap: 10px;
+  }
+  .nav-brand {
+    flex: 1;
+    min-width: 0;
+    gap: 0;
+    justify-content: space-between;
+  }
+  .nav-brand-icon { flex-shrink: 0; }
+  .nav-brand-name {
+    display: inline;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text1);
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: 2px;
+  }
+
+  .nav-mobile-screen {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text1);
+    margin-left: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: none;
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    text-align: center;
+    padding: 0 8px;
+  }
+  .nav-mobile-date {
+    margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+    min-width: 74px;
+    max-width: 30vw;
+    line-height: 1.2;
+    flex-shrink: 0;
+  }
+  .nav-mobile-date-main {
+    font-size: 11px;
+    color: var(--text1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-mobile-date-week {
+    display: block;
+    font-size: 10px;
+    color: var(--text3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
   /* РќР° С‚РµР»РµС„РѕРЅРµ РѕСЃС‚Р°РІР»СЏРµРј С‚РѕР»СЊРєРѕ action-РёРєРѕРЅРєРё, Р°РІР°С‚Р°СЂ СЃРєСЂС‹РІР°РµРј */
-  .nav-right { display: flex; gap: 4px; }
+  .nav-right { display: flex; gap: 0; }
   .nav-avatar { display: none; }
   .burger-btn {
     width: 34px;
@@ -1360,6 +1439,17 @@ body {
   }
 
   #todayLeft #moodSection .divider { display: none; }
+
+  /* Убираем заголовки вкладок со страниц в мобильной версии */
+  #todayLeft .panel-title,
+  #screenHabits h1,
+  #screenAnalytics h1,
+  #screenBadges h1,
+  #screenHabits h1 + p,
+  #screenAnalytics h1 + p,
+  #screenBadges h1 + p {
+    display: none !important;
+  }
 
   /* РџСЂР°РІР°СЏ РєРѕР»РѕРЅРєР°: РѕРґРЅР° РєРѕР»РѕРЅРєР° */
   #todayRight {
