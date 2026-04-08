@@ -65,6 +65,7 @@ body {
 }
 
 .topnav-inner {
+  position: relative;
   max-width: 1280px;
   margin: 0 auto;
   height: 100%;
@@ -109,7 +110,19 @@ body {
   white-space: nowrap;
 }
 .nav-mobile-date-week {
-  display: none;
+  font-size: 11px;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+/* ПК / планшет: день недели перед датой, «понедельник, 8 апреля» */
+@media (min-width: 481px) {
+  .nav-mobile-date-week {
+    order: -1;
+  }
+  .nav-mobile-date-week::after {
+    content: ',\00a0';
+  }
 }
 
 .nav-tabs {
@@ -720,6 +733,10 @@ body {
 /* Левая колонка: не обрезаем настроение (у .panel по умолчанию overflow:hidden) */
 #todayLeft.panel {
   overflow: visible;
+}
+
+#todayLeft > .panel-title {
+  line-height: 1.4;
 }
 
 #todayLeft #moodSection {
@@ -2288,19 +2305,20 @@ body {
 
 /* в”Ђв”Ђ Р”СЂРѕРІРµСЂ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */
 .burger-drawer {
-  position: fixed;
-  top: 52px;
+  position: absolute;
+  top: 100%;
   right: 0;
   width: 220px;
+  margin-top: 0;
   background: var(--surface);
   border: 0.5px solid var(--border);
-  border-radius: 0 0 0 var(--r-lg);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
   z-index: 200;
-  box-shadow: -2px 4px 20px rgba(0,0,0,.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   transform: translateY(-8px);
   opacity: 0;
   pointer-events: none;
-  transition: transform .2s cubic-bezier(.4,0,.2,1),
+  transition: transform .2s cubic-bezier(.4, 0, .2, 1),
               opacity .2s ease;
 }
 .burger-drawer.open {
