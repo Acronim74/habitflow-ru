@@ -404,11 +404,28 @@ function renderAnalytics() {
   const { total, month } = calcPoints();
   const good = habits.filter(h => !h.bad);
   const bad  = habits.filter(h =>  h.bad);
+  const isPhone = window.innerWidth <= 480;
+  const analyticsColStyle = isPhone
+    ? 'max-width:min(1200px,100%);overflow-x:hidden'
+    : 'max-width:min(1200px,100%)';
+  const statsWrapStyle = isPhone
+    ? 'display:flex;gap:8px;margin-bottom:12px;flex-wrap:nowrap'
+    : 'display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap';
+  const statsCardStyle = isPhone
+    ? 'flex:1 1 0;min-width:0;text-align:center;padding:8px 6px'
+    : 'flex:1 1 180px;min-width:0;text-align:center';
+  const statsLabelStyle = isPhone
+    ? 'font-size:9px;color:var(--text3);margin-bottom:3px;line-height:1.15;white-space:normal;overflow-wrap:anywhere'
+    : 'font-size:11px;color:var(--text3);margin-bottom:4px';
+  const statsValueStyle = isPhone
+    ? 'font-size:18px;font-weight:500;line-height:1.1'
+    : 'font-size:22px;font-weight:500';
+  const habitsKpiLabel = isPhone ? 'Привычек' : 'Всего привычек';
 
   screen.innerHTML = `
     <div class="page-grid">
       <div></div>
-      <div style="max-width:min(1200px,100%)">
+      <div style="${analyticsColStyle}">
 
         <div style="display:flex;justify-content:space-between;
                     align-items:center;margin-bottom:16px">
@@ -425,18 +442,18 @@ function renderAnalytics() {
           </div>
         </div>
 
-        <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
-          <div class="panel panel-body" style="flex:1 1 180px;min-width:0;text-align:center">
-            <div style="font-size:11px;color:var(--text3);margin-bottom:4px">Всего очков</div>
-            <div style="font-size:22px;font-weight:500">${total.toLocaleString()}</div>
+        <div style="${statsWrapStyle}">
+          <div class="panel panel-body" style="${statsCardStyle}">
+            <div style="${statsLabelStyle}">Всего очков</div>
+            <div style="${statsValueStyle}">${total.toLocaleString()}</div>
           </div>
-          <div class="panel panel-body" style="flex:1 1 180px;min-width:0;text-align:center">
-            <div style="font-size:11px;color:var(--text3);margin-bottom:4px">За месяц</div>
-            <div style="font-size:22px;font-weight:500">${month.toLocaleString()}</div>
+          <div class="panel panel-body" style="${statsCardStyle}">
+            <div style="${statsLabelStyle}">За месяц</div>
+            <div style="${statsValueStyle}">${month.toLocaleString()}</div>
           </div>
-          <div class="panel panel-body" style="flex:1 1 180px;min-width:0;text-align:center">
-            <div style="font-size:11px;color:var(--text3);margin-bottom:4px">Привычек</div>
-            <div style="font-size:22px;font-weight:500">${habits.length}</div>
+          <div class="panel panel-body" style="${statsCardStyle}">
+            <div style="${statsLabelStyle}">${habitsKpiLabel}</div>
+            <div style="${statsValueStyle}">${habits.length}</div>
           </div>
         </div>
 
@@ -643,7 +660,10 @@ function _renderHmGood() {
     const curM = TODAY.getMonth();
     const curY = TODAY.getFullYear();
     const months = [curM-2, curM-1, curM];
-    let html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">';
+    const isPhone = window.innerWidth <= 480;
+    const qCols = isPhone ? 2 : 3;
+    const qGap = isPhone ? 8 : 16;
+    let html = `<div style="display:grid;grid-template-columns:repeat(${qCols},1fr);gap:${qGap}px">`;
 
     months.forEach(mi => {
       let m = mi;
@@ -691,13 +711,13 @@ function _renderHmGood() {
 
       function renderHalfYear(startMonth) {
         const half = months.slice(startMonth, startMonth + 6);
-        let block = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">';
+        let block = '<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%">';
 
         half.forEach(m => {
           const daysInMonth = new Date(nowY, m + 1, 0).getDate();
           const firstDow = (new Date(nowY, m, 1).getDay() + 6) % 7;
 
-          block += `<div>
+          block += `<div style="min-width:0;overflow:hidden">
             <div style="font-size:10px;font-weight:500;color:var(--text2);margin-bottom:4px">
               ${RU_MONTHS[m]}
             </div>
@@ -929,7 +949,10 @@ function _renderHmBad() {
     const curM = TODAY.getMonth();
     const curY = TODAY.getFullYear();
     const months = [curM-2, curM-1, curM];
-    let html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">';
+    const isPhone = window.innerWidth <= 480;
+    const qCols = isPhone ? 2 : 3;
+    const qGap = isPhone ? 8 : 16;
+    let html = `<div style="display:grid;grid-template-columns:repeat(${qCols},1fr);gap:${qGap}px">`;
 
     months.forEach(mi => {
       let m = mi;
@@ -969,13 +992,13 @@ function _renderHmBad() {
 
       function renderHalfYear(startMonth) {
         const half = months.slice(startMonth, startMonth + 6);
-        let block = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">';
+        let block = '<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%">';
 
         half.forEach(m => {
           const daysInMonth = new Date(nowY, m + 1, 0).getDate();
           const firstDow = (new Date(nowY, m, 1).getDay() + 6) % 7;
 
-          block += `<div>
+          block += `<div style="min-width:0;overflow:hidden">
             <div style="font-size:10px;font-weight:500;color:var(--text2);margin-bottom:4px">
               ${RU_MONTHS[m]}
             </div>
