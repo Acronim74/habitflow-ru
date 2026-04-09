@@ -2,6 +2,7 @@
 
 let _obStep = 0;
 const _OB_TOTAL = 8;
+const _ONBOARDING_DONE_KEY = 'habitflow_onboarding_done';
 
 /** Короткие заголовки для строки прогресса (как в макете). */
 const _OB_HEADINGS = [
@@ -1492,6 +1493,7 @@ function openOnboarding() {
 function obSkip() {
   const el = document.getElementById('onboardingScreen');
   if (el) el.style.display = 'none';
+  localStorage.setItem(_ONBOARDING_DONE_KEY, '1');
   saveData();
   renderAll();
 }
@@ -1922,10 +1924,10 @@ function setTheme(theme, save = true) {
 document.addEventListener('DOMContentLoaded', () => {
   loadData();
 
-  const isFirstRun = !localStorage.getItem(LS_KEY);
+  const shouldShowOnboarding = localStorage.getItem(_ONBOARDING_DONE_KEY) !== '1';
   const onboarding = document.getElementById('onboardingScreen');
   if (onboarding) {
-    if (isFirstRun) {
+    if (shouldShowOnboarding) {
       _obStep = 0;
       _obRender();
       onboarding.style.display = 'flex';
