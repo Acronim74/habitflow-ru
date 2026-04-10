@@ -1,4 +1,4 @@
-const CACHE = 'habitflow-v3';
+const CACHE = 'habitflow-v4';
 
 // Динамически определяем базовый путь — работает с любым именем репо
 const BASE = self.location.pathname.replace(/\/sw\.js$/, '');
@@ -42,16 +42,18 @@ self.addEventListener('activate', e => {
 // Fetch — кэш первым, затем сеть (cache-first для надёжного офлайн)
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  const req = e.request;
+  const isNavigation = req.mode === 'navigate';
 
   e.respondWith(
-    caches.match(e.request).then(cached => {
+    caches.match(req).then(cached => {
       if (cached) {
         // Есть в кэше — отдаём сразу, фоном обновляем
-        fetch(e.request)
+        fetch(req)
           .then(response => {
             if (response && response.status === 200) {
               caches.open(CACHE)
-                .then(cache => cache.put(e.request, response));
+                .then(cache => cache.put(req, response.clone()));
             }
           })
           .catch(() => {}); // офлайн — не страшно
@@ -59,16 +61,20 @@ self.addEventListener('fetch', e => {
       }
 
       // Нет в кэше — идём в сеть
-      return fetch(e.request)
+      return fetch(req)
         .then(response => {
           if (response && response.status === 200) {
             const clone = response.clone();
             caches.open(CACHE)
-              .then(cache => cache.put(e.request, clone));
+              .then(cache => cache.put(req, clone));
           }
           return response;
         })
-        .catch(() => caches.match(BASE + '/index.html'));
+        .catch(() => {
+          // Для навигации возвращаем app-shell, для ассетов — стандартная ошибка сети.
+          if (isNavigation) return caches.match(BASE + '/index.html');
+          return Response.error();
+        });
     })
   );
 });
