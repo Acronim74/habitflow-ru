@@ -45,16 +45,30 @@ function _updateTopBarMeta() {
   }
 }
 
+function _netStatusIconSvg(isOnline) {
+  if (isOnline) {
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/></svg>';
+  }
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 2 20 20"/><path d="M8.72 8.72a10.5 10.5 0 0 0-3.58 5.62"/><path d="M12.56 16.6a6 6 0 0 0-1.72-8.12"/><path d="M17.7 17.7a13 13 0 0 0 2.22-5.67"/><path d="M9.35 9.35A5 5 0 0 1 15 12v1"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/></svg>';
+}
+
 function _syncNetworkStatusUI(announceChange = false) {
-  const el = document.getElementById('navNetStatus');
-  if (!el) return;
+  const wrap = document.getElementById('navNetStatus');
+  const txt = document.getElementById('navNetStatusTxt');
+  const ico = document.getElementById('navNetStatusIco');
+  if (!wrap) return;
   const isOnline = navigator.onLine !== false;
   const prev = _lastNetworkOnline;
   _lastNetworkOnline = isOnline;
 
-  el.textContent = isOnline ? '● Онлайн' : '● Офлайн';
-  el.classList.toggle('offline', !isOnline);
-  el.setAttribute('aria-label', isOnline ? 'Статус сети: онлайн' : 'Статус сети: офлайн');
+  if (txt) {
+    txt.textContent = isOnline ? '● Онлайн' : '● Офлайн';
+  }
+  if (ico) {
+    ico.innerHTML = _netStatusIconSvg(isOnline);
+  }
+  wrap.classList.toggle('offline', !isOnline);
+  wrap.setAttribute('aria-label', isOnline ? 'Статус сети: онлайн' : 'Статус сети: офлайн');
 
   if (announceChange && prev !== null && prev !== isOnline) {
     showToast(isOnline ? 'Интернет подключен' : 'Нет интернета · офлайн режим');

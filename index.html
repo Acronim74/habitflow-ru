@@ -62,7 +62,10 @@
     </div>
 
     <div class="nav-right">
-      <div class="nav-net-status" id="navNetStatus" aria-live="polite">● Онлайн</div>
+      <div class="nav-net-status" id="navNetStatus" role="status" aria-live="polite">
+        <span class="nav-net-status-ico" id="navNetStatusIco" aria-hidden="true"></span>
+        <span class="nav-net-status-txt" id="navNetStatusTxt">● Онлайн</span>
+      </div>
 
       <!-- Аватар (только ПК) -->
       <button class="nav-avatar" type="button" onclick="navigate('badges')">
