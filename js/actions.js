@@ -479,8 +479,8 @@ function saveNewHabit() {
   habits.push(h);
   saveData();
   closeCreate();
-  renderToday();
-  renderNav();
+  // Обновляем именно текущий экран, чтобы новая привычка была видна сразу.
+  renderAll();
   showToast('✓ «' + name + '» добавлена');
 }
 
