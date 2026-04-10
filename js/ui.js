@@ -3,6 +3,7 @@
 let _obStep = 0;
 const _OB_TOTAL = 8;
 const _ONBOARDING_DONE_KEY = 'habitflow_onboarding_done';
+let _lastNetworkOnline = null;
 
 /** Короткие заголовки для строки прогресса (как в макете). */
 const _OB_HEADINGS = [
@@ -41,6 +42,22 @@ function _updateTopBarMeta() {
     legacyEl.textContent = d.toLocaleDateString('ru-RU', {
       weekday: 'long', day: 'numeric', month: 'long',
     });
+  }
+}
+
+function _syncNetworkStatusUI(announceChange = false) {
+  const el = document.getElementById('navNetStatus');
+  if (!el) return;
+  const isOnline = navigator.onLine !== false;
+  const prev = _lastNetworkOnline;
+  _lastNetworkOnline = isOnline;
+
+  el.textContent = isOnline ? '● Онлайн' : '● Офлайн';
+  el.classList.toggle('offline', !isOnline);
+  el.setAttribute('aria-label', isOnline ? 'Статус сети: онлайн' : 'Статус сети: офлайн');
+
+  if (announceChange && prev !== null && prev !== isOnline) {
+    showToast(isOnline ? 'Интернет подключен' : 'Нет интернета · офлайн режим');
   }
 }
 
@@ -1946,6 +1963,10 @@ document.addEventListener('DOMContentLoaded', () => {
   _syncDayProgressWidgetToggleUI();
   _syncBestStreakWidgetToggleUI();
   _syncSeriesWidgetToggleUI();
+  _syncNetworkStatusUI(false);
+
+  window.addEventListener('online', () => _syncNetworkStatusUI(true));
+  window.addEventListener('offline', () => _syncNetworkStatusUI(true));
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

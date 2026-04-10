@@ -152,6 +152,20 @@ body {
   gap: 8px;
   flex-shrink: 0;
 }
+.nav-net-status {
+  font-size: 11px;
+  color: var(--accent);
+  border: 0.5px solid var(--accent2);
+  background: var(--accent-bg);
+  border-radius: 999px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+.nav-net-status.offline {
+  color: var(--bad);
+  border-color: var(--bad-light);
+  background: var(--bad-bg);
+}
 
 .nav-avatar {
   display: flex;
@@ -1466,6 +1480,7 @@ body {
 
   /* РќР° С‚РµР»РµС„РѕРЅРµ РѕСЃС‚Р°РІР»СЏРµРј С‚РѕР»СЊРєРѕ action-РёРєРѕРЅРєРё, Р°РІР°С‚Р°СЂ СЃРєСЂС‹РІР°РµРј */
   .nav-right { display: flex; gap: 0; }
+  .nav-net-status { display: none; }
   .nav-avatar { display: none; }
   .burger-btn {
     width: 34px;
