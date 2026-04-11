@@ -5,6 +5,21 @@ const _OB_TOTAL = 8;
 const _ONBOARDING_DONE_KEY = 'habitflow_onboarding_done';
 let _lastNetworkOnline = null;
 
+/** Событие установки PWA (Chrome, Edge, Samsung Internet и др.). Одноразовое. */
+let _deferredInstallPrompt = null;
+/** Сразу после установки вкладка ещё не в standalone — показываем своё сообщение. */
+let _pwaInstalledThisSession = false;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  _deferredInstallPrompt = e;
+  document.dispatchEvent(new CustomEvent('habitflow-install-available'));
+});
+window.addEventListener('appinstalled', () => {
+  _deferredInstallPrompt = null;
+  _pwaInstalledThisSession = true;
+  document.dispatchEvent(new CustomEvent('habitflow-install-done'));
+});
+
 /** Короткие заголовки для строки прогресса (как в макете). */
 const _OB_HEADINGS = [
   'ПРИВЕТСТВИЕ',
@@ -1447,6 +1462,7 @@ function _obRender() {
   _obProgress();
   _obContent();
   _obFooterRender();
+  _obSetupInstallStep();
 }
 
 function _obProgress() {
@@ -1529,6 +1545,90 @@ function obSkip() {
   saveData();
   renderAll();
 }
+
+const _OB_INSTALL_STEP = 6;
+
+function _isPwaStandalone() {
+  return window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+}
+
+function _isLikelyIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+function _obSetupInstallStep() {
+  if (_obStep !== _OB_INSTALL_STEP) return;
+  const btn = document.getElementById('obPwaInstallBtn');
+  const fb = document.getElementById('obPwaInstallFallback');
+  if (!btn || !fb) return;
+
+  if (_pwaInstalledThisSession && !_isPwaStandalone()) {
+    btn.hidden = true;
+    fb.hidden = false;
+    fb.textContent = 'Установка прошла успешно. Закрой эту вкладку и открой HabitFlow с иконки на главном экране или в меню программ.';
+    return;
+  }
+
+  if (_isPwaStandalone()) {
+    btn.hidden = true;
+    fb.hidden = false;
+    fb.textContent = 'Приложение уже установлено — открой его с главного экрана или из списка программ.';
+    return;
+  }
+
+  if (_deferredInstallPrompt) {
+    btn.hidden = false;
+    fb.hidden = true;
+    return;
+  }
+
+  btn.hidden = true;
+  fb.hidden = false;
+  if (_isLikelyIOS()) {
+    fb.textContent = 'В Safari нажми «Поделиться», затем «На экран «Домой»». Системного окна «Установить», как в Chrome, здесь нет.';
+  } else {
+    fb.textContent = 'Когда браузер предложит установку — соглашайся. Иначе: значок установки в адресной строке или меню ⋮ → «Установить приложение» (Chrome / Edge).';
+  }
+}
+
+async function pwaTryInstall() {
+  if (_isPwaStandalone()) {
+    showToast('Приложение уже установлено.');
+    return;
+  }
+  if (!_deferredInstallPrompt) {
+    if (_isLikelyIOS()) {
+      showToast('Safari: «Поделиться» → «На экран «Домой»»');
+    } else {
+      showToast('Ищи значок установки в адресной строке или пункт в меню браузера.');
+    }
+    return;
+  }
+
+  try {
+    const ev = _deferredInstallPrompt;
+    _deferredInstallPrompt = null;
+    ev.prompt();
+    const { outcome } = await ev.userChoice;
+    if (outcome === 'accepted') {
+      showToast('Готово — приложение добавлено.');
+    }
+    _obSetupInstallStep();
+  } catch (err) {
+    console.log('PWA install:', err);
+    _deferredInstallPrompt = null;
+    _obSetupInstallStep();
+  }
+}
+
+document.addEventListener('habitflow-install-available', () => {
+  if (_obStep === _OB_INSTALL_STEP) _obSetupInstallStep();
+});
+document.addEventListener('habitflow-install-done', () => {
+  if (_obStep === _OB_INSTALL_STEP) _obSetupInstallStep();
+});
 
 function loadDemoData() {
   const yesterday = (() => {
@@ -1739,6 +1839,11 @@ function _obSteps() {
      <div class="ob-title">Установи как приложение</div>
      <div class="ob-text">HabitFlow можно установить на телефон или компьютер —
        будет работать как обычное приложение без браузерной строки.</div>
+     <div class="ob-install-block">
+       <button type="button" class="ob-btn-install" id="obPwaInstallBtn"
+               onclick="pwaTryInstall()">Установить приложение</button>
+       <p class="ob-install-fallback" id="obPwaInstallFallback" hidden></p>
+     </div>
      <div class="ob-data-row">
        <div class="ob-data-ico">🤖</div>
        <div class="ob-data-text"><b>Android:</b> открой в Chrome →
