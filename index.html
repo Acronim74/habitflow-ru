@@ -16,6 +16,14 @@
 </head>
 <body>
 
+<div id="iosInAppBanner" class="ios-inapp-banner" hidden role="alert">
+  <div class="ios-inapp-banner-inner">
+    <p class="ios-inapp-banner-msg" id="iosInAppBannerMsg"></p>
+    <button type="button" class="ios-inapp-banner-close"
+            onclick="dismissIOSInAppBanner()" aria-label="Закрыть">×</button>
+  </div>
+</div>
+
 <canvas id="confCanvas"></canvas>
 
 <!-- ════════════ ОНБОРДИНГ-МАСТЕР ════════════ -->

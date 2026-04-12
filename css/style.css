@@ -53,6 +53,64 @@ body {
   width: 100%;
 }
 
+/* Баннер: iPhone, встроенный браузер (ВК и др.) → открыть в Safari */
+.ios-inapp-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10050;
+  padding: max(10px, env(safe-area-inset-top, 0px)) 44px 12px 14px;
+  background: linear-gradient(180deg, #1e4d3a 0%, var(--accent) 100%);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.45;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+}
+
+.ios-inapp-banner-inner {
+  position: relative;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.ios-inapp-banner-msg {
+  margin: 0;
+  padding-right: 4px;
+}
+
+.ios-inapp-banner-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 36px;
+  height: 36px;
+  margin: -4px -6px 0 0;
+  border: none;
+  border-radius: var(--r-sm);
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s;
+}
+
+.ios-inapp-banner-close:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+html.ios-inapp-banner-visible .app {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 118px);
+}
+
+@media (min-width: 700px) {
+  html.ios-inapp-banner-visible .app {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 96px);
+  }
+}
+
 /* в”Ђв”Ђ Р’РµСЂС…РЅСЏСЏ РЅР°РІРёРіР°С†РёСЏ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */
 .topnav {
   position: sticky;
@@ -1894,6 +1952,10 @@ body {
   align-items: center;
   justify-content: center;
   padding: 20px;
+}
+
+html.ios-inapp-banner-visible .ob-overlay {
+  padding-top: calc(20px + env(safe-area-inset-top, 0px) + 100px);
 }
 
 .ob-wizard {

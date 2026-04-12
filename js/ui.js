@@ -1558,6 +1558,74 @@ function _isLikelyIOS() {
     || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 }
 
+const _IOS_INAPP_HINT_KEY = 'habitflow_ios_inapp_hint';
+
+/** Известные встроенные браузеры на iOS (по userAgent). */
+function _iosInAppHostLabel(ua) {
+  const u = ua || '';
+  if (/VKJSBridge|VKShare|vk_share|VK_ios|VkClient|VK\/\d/i.test(u)) return 'ВКонтакте';
+  if (/OKApp/i.test(u)) return 'Одноклассники';
+  if (/Instagram/i.test(u)) return 'Instagram';
+  if (/FBAN|FBAV|FB_IAB/i.test(u)) return 'Facebook';
+  if (/\bTelegram\b/i.test(u)) return 'Telegram';
+  if (/TikTok|musical_ly|Bytedance/i.test(u)) return 'TikTok';
+  if (/\bTwitter\b/i.test(u)) return 'Twitter';
+  if (/Line\//i.test(u)) return 'LINE';
+  if (/MicroMessenger/i.test(u)) return 'WeChat';
+  if (/Snapchat/i.test(u)) return 'Snapchat';
+  if (/LinkedInApp/i.test(u)) return 'LinkedIn';
+  if (/Discord/i.test(u)) return 'Discord';
+  return null;
+}
+
+/**
+ * Встроенный WebView на iPhone часто без подстроки Version/… перед Mobile/… Safari/
+ * (в отличие от полноценного Safari). Не трогаем Android и полноценные iOS-браузеры.
+ */
+function _iosLikelyEmbeddedWebView() {
+  const ua = navigator.userAgent || '';
+  if (!_isLikelyIOS()) return false;
+  if (/CriOS|FxiOS|EdgiOS/.test(ua)) return false;
+  if (/Version\/[\d.]+[^\n]*Mobile[^\n]*Safari\//i.test(ua)) return false;
+  return /AppleWebKit.+Mobile\/\S+.+Safari\//i.test(ua);
+}
+
+function _shouldShowIOSInAppSafariHint() {
+  if (!_isLikelyIOS() || _isPwaStandalone()) return false;
+  if (sessionStorage.getItem(_IOS_INAPP_HINT_KEY) === '1') return false;
+  const ua = navigator.userAgent || '';
+  return !!_iosInAppHostLabel(ua) || _iosLikelyEmbeddedWebView();
+}
+
+function dismissIOSInAppBanner() {
+  const el = document.getElementById('iosInAppBanner');
+  if (el) el.hidden = true;
+  document.documentElement.classList.remove('ios-inapp-banner-visible');
+  try {
+    sessionStorage.setItem(_IOS_INAPP_HINT_KEY, '1');
+  } catch (e) { /* private mode */ }
+}
+
+function _initIOSInAppBanner() {
+  if (!_shouldShowIOSInAppSafariHint()) return;
+  const el = document.getElementById('iosInAppBanner');
+  const msg = document.getElementById('iosInAppBannerMsg');
+  if (!el || !msg) return;
+
+  const ua = navigator.userAgent || '';
+  const label = _iosInAppHostLabel(ua);
+  const openSafari = 'Нажми «⋯» или «Поделиться» внизу и выбери «Открыть в Safari» или «Открыть в браузере». Если такого пункта нет — скопируй адрес страницы и вставь его в Safari. Затем в Safari: «Поделиться» → «На экран «Домой»».';
+
+  if (label) {
+    msg.textContent = `Похоже, HabitFlow открыт внутри «${label}». Здесь нельзя добавить сайт на экран «Домой». ${openSafari}`;
+  } else {
+    msg.textContent = `Похоже, страница открыта во встроенном браузере (не Safari). Так нельзя добавить HabitFlow на экран «Домой». ${openSafari}`;
+  }
+
+  el.hidden = false;
+  document.documentElement.classList.add('ios-inapp-banner-visible');
+}
+
 function _obSetupInstallStep() {
   if (_obStep !== _OB_INSTALL_STEP) return;
   const btn = document.getElementById('obPwaInstallBtn');
@@ -2084,6 +2152,8 @@ document.addEventListener('DOMContentLoaded', () => {
   _syncBestStreakWidgetToggleUI();
   _syncSeriesWidgetToggleUI();
   _syncNetworkStatusUI(false);
+
+  _initIOSInAppBanner();
 
   window.addEventListener('online', () => _syncNetworkStatusUI(true));
   window.addEventListener('offline', () => _syncNetworkStatusUI(true));
