@@ -329,18 +329,19 @@ function _buildArchivedCard(h) {
       </div>
       <div class="flex gap-6">
         <button type="button" class="btn btn-ghost"
-                style="font-size:12px;padding:5px 10px"
-                onclick="restoreHabit('${h.id}')">
+                style="font-size:12px;padding:5px 10px">
           Восстановить
         </button>
         <button type="button" class="btn btn-ghost"
                 style="font-size:12px;padding:5px 10px;color:var(--bad);
-                       border-color:var(--bad-light)"
-                onclick="confirmDeleteArchived('${h.id}')">
+                       border-color:var(--bad-light)">
           Удалить
         </button>
       </div>
     </div>`;
+  const [restoreBtn, delBtn] = div.querySelectorAll('.flex.gap-6 .btn');
+  restoreBtn.addEventListener('click', () => restoreHabit(h.id));
+  delBtn.addEventListener('click', () => confirmDeleteArchived(h.id));
   return div;
 }
 
@@ -431,17 +432,18 @@ function _buildHabitManageCard(h) {
       </div>
       <div class="flex gap-6">
         <button type="button" class="btn btn-ghost"
-                style="font-size:12px;padding:5px 10px"
-                onclick="openEdit('${h.id}')">Изменить</button>
+                style="font-size:12px;padding:5px 10px">Изменить</button>
         <button type="button" class="btn btn-ghost"
-                style="font-size:12px;padding:5px 10px"
-                onclick="openDelete('${h.id}')">Удалить</button>
+                style="font-size:12px;padding:5px 10px">Удалить</button>
       </div>
     </div>
     <div class="flex gap-12 mt-8" style="font-size:12px;color:var(--text3)">
       <span>${h.bad ? '🛡️' : '🔥'} Личный рекорд: ${streak} дн.</span>
       <span>🏆 Рекорд: ${best} дн.</span>
     </div>`;
+  const [editBtn, deleteBtn] = div.querySelectorAll('.flex.gap-6 .btn');
+  editBtn.addEventListener('click', () => openEdit(h.id));
+  deleteBtn.addEventListener('click', () => openDelete(h.id));
   return div;
 }
 
@@ -1389,6 +1391,21 @@ function renderBadges() {
             ${next ? ' · ещё ' + (next.pts - total).toLocaleString()
                      + ' до ' + esc(next.nameRU) : ''}
           </div>
+
+          <div class="stages-road">
+            ${STAGES.map((s, i) => {
+              const done    = i < stageIdx;
+              const current = i === stageIdx;
+              return `<div class="stages-road-item${current ? ' current' : done ? ' done' : ''}">
+                        <div class="stages-road-dot" style="--sc:${s.color}">
+                          ${s.emoji}
+                        </div>
+                        <div class="stages-road-name">${esc(s.nameRU)}</div>
+                        <div class="stages-road-pts">${s.pts.toLocaleString()}</div>
+                      </div>
+                      ${i < STAGES.length - 1 ? '<div class="stages-road-line' + (done ? ' done' : '') + '"></div>' : ''}`;
+            }).join('')}
+          </div>
         </div>
 
         <div class="panel panel-body">
@@ -1413,14 +1430,8 @@ function renderBadges() {
       <div></div>
     </div>`;
 
-  const src = gender === 'female' ? stage.f : stage.m;
   const avEl = document.getElementById('badgesAvatar');
-  if (src && avEl) {
-    avEl.innerHTML = `<img src="${src}" alt=""
-      style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
-  } else if (avEl) {
-    avEl.textContent = stage.emoji;
-  }
+  if (avEl) avEl.textContent = stage.emoji;
 }
 
 // ── Тосты ─────────────────────────────────
@@ -1684,8 +1695,7 @@ async function pwaTryInstall() {
       showToast('Готово — приложение добавлено.');
     }
     _obSetupInstallStep();
-  } catch (err) {
-    console.log('PWA install:', err);
+  } catch (_err) {
     _deferredInstallPrompt = null;
     _obSetupInstallStep();
   }
@@ -1721,7 +1731,6 @@ function loadDemoData() {
 
   archived     = [];
   earnedBadges = [];
-  gender       = null;
   moodLog      = { [yesterday]: 3, [twoDaysAgo]: 2 };
   moodEnabled  = true;
 
@@ -2177,7 +2186,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
           });
         })
-        .catch(err => console.log('SW error:', err));
+        .catch(() => {});
 
       // Перезагружаем когда SW поменялся
       navigator.serviceWorker.addEventListener('controllerchange', () => {

@@ -707,40 +707,52 @@ html.ios-inapp-banner-visible .app {
   flex-shrink: 0;
 }
 
-/* в”Ђв”Ђ РЎРµРіРјРµРЅС‚РЅС‹Р№ РёРЅРґРёРєР°С‚РѕСЂ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */
+/* ── SVG-дуга прогресса дня ─────────────────────────────── */
 #segWrap {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  width: 100%;
-  min-width: 0;
-  align-items: stretch;
-  align-self: stretch;
-}
-
-#segWrap .seg-bar {
-  width: 100%;
-  box-sizing: border-box;
-  align-self: stretch;
-}
-
-.seg-bar {
-  height: 22px;
-  border-radius: var(--r-sm);
-  background: var(--border);
-  color: var(--text4);
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
-  font-weight: 500;
-  transition: background .3s ease, color .2s ease;
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+}
+
+#gaugeArcSvg {
+  display: block;
+}
+
+.gauge-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gauge-pct {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text1);
+  line-height: 1;
+}
+
+.gauge-meta {
+  font-size: 11px;
+  color: var(--text3);
+  text-align: center;
+  margin-top: 4px;
+}
+
+#gaugeArcFill {
+  transition: stroke-dashoffset .45s ease;
 }
 
 /* РљР°СЂС‚РѕС‡РєР° РёРЅРґРёРєР°С‚РѕСЂР° */
 .dash-gauge-card {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 6px;
 }
 
@@ -909,14 +921,87 @@ html.ios-inapp-banner-visible .app {
 }
 .hm-cell {
   aspect-ratio: 1;
-  border-radius: 3px;
+  border-radius: 4px;
   background: var(--border);
+  opacity: .55;
 }
-.hm-cell.lv1 { background: var(--accent3); }
-.hm-cell.lv2 { background: var(--accent2); }
-.hm-cell.lv3 { background: var(--accent);  }
-.hm-cell.lv4 { background: var(--hm-lv4); }
-.hm-cell.today { outline: 1.5px solid var(--accent); outline-offset: 1px; }
+.hm-cell.lv1 { background: var(--accent3); opacity: .75; }
+.hm-cell.lv2 { background: var(--accent2); opacity: .85; }
+.hm-cell.lv3 { background: var(--accent);  opacity: 1; }
+.hm-cell.lv4 { background: var(--hm-lv4);  opacity: 1; }
+.hm-cell.today {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  opacity: 1;
+}
+
+/* ── Дорожная карта стадий ─────────────────────────────── */
+.stages-road {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0;
+  margin-top: 16px;
+  overflow-x: auto;
+  padding: 4px 0 8px;
+}
+
+.stages-road-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.4;
+  flex-shrink: 0;
+  width: 64px;
+}
+
+.stages-road-item.done    { opacity: 0.7; }
+.stages-road-item.current { opacity: 1; }
+
+.stages-road-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--sc) 20%, transparent);
+  border: 2px solid var(--sc, var(--border));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: transform .2s;
+}
+
+.stages-road-item.current .stages-road-dot {
+  transform: scale(1.25);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--sc) 60%, transparent);
+}
+
+.stages-road-name {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text2);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.stages-road-item.current .stages-road-name { color: var(--text1); font-weight: 600; }
+
+.stages-road-pts {
+  font-size: 9px;
+  color: var(--text3);
+}
+
+.stages-road-line {
+  width: 20px;
+  height: 2px;
+  background: var(--border);
+  margin-top: 17px;
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+.stages-road-line.done { background: var(--accent2); }
 
 /* в”Ђв”Ђ XP РїСЂРѕРіСЂРµСЃСЃ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */
 .xp-row {
@@ -996,7 +1081,10 @@ html.ios-inapp-banner-visible .app {
 }
 
 .mood-btn:hover    { transform: scale(1.18); }
-.mood-btn.selected { transform: scale(1.1);  }
+.mood-btn.selected {
+  transform: scale(1.35);
+  filter: drop-shadow(0 0 6px var(--accent));
+}
 
 /* в”Ђв”Ђ Toast в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */
 .toast-wrap {
@@ -1387,6 +1475,16 @@ html.ios-inapp-banner-visible .app {
   min-width: 0;
 }
 
+.hcard-back-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
 .hcard-back-title {
   font-size: 13px;
   font-weight: 500;
@@ -1681,26 +1779,6 @@ html.ios-inapp-banner-visible .app {
     padding: 10px 12px;
   }
 
-  #segWrap {
-    flex-direction: row !important;
-    gap: 3px;
-    align-items: stretch;
-  }
-
-  /* Сегменты делят ширину карточки поровну */
-  #segWrap .seg-bar,
-  #segWrap .seg-h {
-    width: auto;
-    flex: 1 1 0;
-    min-width: 0;
-  }
-
-  .seg-bar,
-  .seg-h {
-    height: 28px;
-    font-size: 9px;
-  }
-
   #todayLeft .divider { display: none; }
 
   /* Настроение — горизонтальная карточка на всю ширину.
@@ -1846,6 +1924,11 @@ html.ios-inapp-banner-visible .app {
 /* в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ
    РўР РћРќ
    в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ */
+/* ── Десктоп ≥ 901px ───────────────────────────────────── */
+@media (min-width: 901px) {
+  .btn-add { display: none !important; }
+}
+
 [data-theme="tron"] {
   --bg:          #020c18;
   --surface:     #041220;
@@ -2572,39 +2655,50 @@ html.ios-inapp-banner-visible .ob-overlay {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 
-/* РўРµРјС‹ РІРЅСѓС‚СЂРё РґСЂРѕРІРµСЂР° */
-.burger-theme-row {
-  display: flex;
-  gap: 6px;
+/* Темы внутри дровера */
+.burger-theme-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
   padding: 6px 16px 10px;
 }
 
-.burger-theme-row .theme-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
+.burger-theme-grid .theme-btn {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  gap: 4px;
+  padding: 8px 6px;
+  border-radius: var(--r-sm);
+  border: 2px solid transparent;
+  cursor: pointer;
   background: var(--bg);
-  transition: border-color .15s, transform .1s;
+  transition: border-color .15s, transform .1s, opacity .15s;
   opacity: 0.6;
 }
-.burger-theme-row .theme-btn:hover {
+.burger-theme-grid .theme-btn:hover {
   opacity: 0.9;
-  transform: scale(1.08);
+  transform: scale(1.04);
 }
-.burger-theme-row .theme-btn.active {
+.burger-theme-grid .theme-btn.active {
   opacity: 1;
   border-color: var(--accent);
+  background: var(--card);
 }
-.burger-theme-row .theme-btn[data-theme="light"]  { color: #e8a020; }
-.burger-theme-row .theme-btn[data-theme="dark"]   { color: #aaaaaa; }
-.burger-theme-row .theme-btn[data-theme="tron"]   { color: #00c8ff; }
-.burger-theme-row .theme-btn[data-theme="blade"]  { color: #c87a22; }
+
+.theme-btn-ico  { font-size: 18px; line-height: 1; }
+.theme-btn-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text2);
+  white-space: nowrap;
+}
+
+.burger-theme-grid .theme-btn[data-theme="light"]  { color: #e8a020; }
+.burger-theme-grid .theme-btn[data-theme="dark"]   { color: #aaaaaa; }
+.burger-theme-grid .theme-btn[data-theme="tron"]   { color: #00c8ff; }
+.burger-theme-grid .theme-btn[data-theme="blade"]  { color: #c87a22; }
 
 /* РќР° РџРљ вЂ” Р°РІР°С‚Р°СЂ РІРёРґРµРЅ, Р±СѓСЂРіРµСЂ С‚РѕР¶Рµ */
 /* РќР° РїР»Р°РЅС€РµС‚Рµ Рё С‚РµР»РµС„РѕРЅРµ вЂ” Р°РІР°С‚Р°СЂ СЃРєСЂС‹С‚, Р±СѓСЂРіРµСЂ РІРёРґРµРЅ */

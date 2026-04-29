@@ -101,19 +101,27 @@
       <!-- Тема -->
       <div class="burger-section">
         <div class="burger-section-title">Тема</div>
-        <div class="burger-theme-row">
+        <div class="burger-theme-grid">
           <button type="button" class="theme-btn active"
-                  data-theme="light" onclick="setTheme('light')"
-                  title="Светлая">☀️</button>
+                  data-theme="light" onclick="setTheme('light')">
+            <span class="theme-btn-ico">☀️</span>
+            <span class="theme-btn-label">Светлая</span>
+          </button>
           <button type="button" class="theme-btn"
-                  data-theme="dark" onclick="setTheme('dark')"
-                  title="Тёмная">🌙</button>
+                  data-theme="dark" onclick="setTheme('dark')">
+            <span class="theme-btn-ico">🌙</span>
+            <span class="theme-btn-label">Тёмная</span>
+          </button>
           <button type="button" class="theme-btn"
-                  data-theme="tron" onclick="setTheme('tron')"
-                  title="Трон">◈</button>
+                  data-theme="tron" onclick="setTheme('tron')">
+            <span class="theme-btn-ico">◈</span>
+            <span class="theme-btn-label">Трон</span>
+          </button>
           <button type="button" class="theme-btn"
-                  data-theme="blade" onclick="setTheme('blade')"
-                  title="Blade Runner">◉</button>
+                  data-theme="blade" onclick="setTheme('blade')">
+            <span class="theme-btn-ico">◉</span>
+            <span class="theme-btn-label">Blade Runner</span>
+          </button>
         </div>
       </div>
 
@@ -236,19 +244,21 @@
 
         <!-- Карточка прогресса дня (отдельно, над стриком) -->
         <div id="dayProgressSection" class="dash-gauge-card dash-gauge-card--top">
-          <div id="segWrap" style="display:flex;flex-direction:column;gap:3px;width:100%">
-            <div id="seg-100" class="seg-bar">100%</div>
-            <div id="seg-80"  class="seg-bar">80%</div>
-            <div id="seg-60"  class="seg-bar">60%</div>
-            <div id="seg-40"  class="seg-bar">40%</div>
-            <div id="seg-20"  class="seg-bar">20%</div>
+          <div id="segWrap">
+            <svg id="gaugeArcSvg" viewBox="0 0 100 100" width="96" height="96" aria-hidden="true">
+              <circle cx="50" cy="50" r="40" fill="none"
+                      stroke="var(--border)" stroke-width="9"/>
+              <circle id="gaugeArcFill" cx="50" cy="50" r="40" fill="none"
+                      stroke="var(--accent)" stroke-width="9"
+                      stroke-linecap="round"
+                      stroke-dasharray="251.2" stroke-dashoffset="251.2"
+                      transform="rotate(-90 50 50)"/>
+            </svg>
+            <div class="gauge-center">
+              <div id="gaugePct" class="gauge-pct">0%</div>
+            </div>
           </div>
-          <div style="display:flex;align-items:baseline;justify-content:space-between;width:100%;margin-top:4px">
-            <div id="gaugePct"
-                 style="font-size:18px;font-weight:500;color:var(--text1)">0%</div>
-            <div class="donut-meta" id="donutMeta"
-                 style="font-size:10px;color:var(--text3)">0 из 0</div>
-          </div>
+          <div id="donutMeta" class="gauge-meta">0 из 0</div>
         </div>
 
         <!-- Личный рекорд (дней подряд; между прогрессом и серией) -->
@@ -456,7 +466,6 @@
 </div>
 
 <!-- ════════════ СКРИПТЫ ════════════ -->
-<script src="js/assets.js"></script>
 <script src="js/data.js"></script>
 <script src="js/state.js"></script>
 <script src="js/helpers.js"></script>

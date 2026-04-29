@@ -4,8 +4,6 @@ const SCHEMA_VERSION = 1;
 const TODAY  = new Date();
 
 // Стадии развития персонажа
-// Поля f (female) и m (male) с base64 PNG
-// будут добавлены из assets.js
 const STAGES = [
   { pts:0,     nameRU:'Начало',        emoji:'🌱',
     color:'#52b788', glow:'#95d5b2', ring:'#2d6a4f' },
@@ -57,7 +55,7 @@ const BADGES = [
     check: () => _checkLucky() },
 ];
 
-// Настроение — подписи (картинки придут из assets.js)
+// Настроение — подписи
 const MOOD_LABELS = [
   'Тяжело', 'Так себе', 'Нормально', 'Хорошо', 'Отлично'
 ];

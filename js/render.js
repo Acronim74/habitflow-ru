@@ -1,7 +1,6 @@
-﻿// ── Сегментный прогресс дня ─────────────────
+﻿// ── Круговой прогресс дня (SVG-дуга) ─────────
 
-const _SEG_LEVELS = [20, 40, 60, 80, 100];
-const _SEG_COLORS = ['#95d5b2', '#74c69d', '#52b788', '#2d6a4f', '#1a4d38'];
+const _ARC_CIRCUMFERENCE = 251.2; // 2π × r40
 
 let _gaugeCurrentPct = 0;
 let _gaugeTargetPct  = 0;
@@ -28,29 +27,18 @@ function _gaugeStep() {
 
 function _drawGauge(pct) {
   const val = Math.round(pct);
-  const wrap = document.getElementById('segWrap');
-  if (!wrap) return;
 
-  // Обновляем каждый сегмент
-  _SEG_LEVELS.forEach((threshold, i) => {
-    const seg = document.getElementById('seg-' + threshold);
-    if (!seg) return;
-    const isActive = val >= threshold;
-    seg.style.background = isActive
-      ? _SEG_COLORS[i]
-      : 'var(--border)';
-    seg.style.color = isActive
-      ? (threshold <= 20 ? 'var(--accent)' : 'white')
-      : 'var(--text4)';
-  });
+  const arcFill = document.getElementById('gaugeArcFill');
+  if (arcFill) {
+    const fillPct = Math.min(val, 100);
+    arcFill.style.strokeDashoffset = _ARC_CIRCUMFERENCE * (1 - fillPct / 100);
+    arcFill.style.stroke = val >= 100 ? 'var(--accent)' : 'var(--accent)';
+  }
 
-  // Обновляем большой процент
   const pctEl = document.getElementById('gaugePct');
   if (pctEl) {
     pctEl.textContent = val + '%';
-    pctEl.style.color = val >= 100
-      ? 'var(--accent)'
-      : 'var(--text1)';
+    pctEl.style.color = val >= 100 ? 'var(--accent)' : 'var(--text1)';
   }
 }
 
@@ -62,18 +50,12 @@ function renderNav() {
   const pic = document.getElementById('navAvPic');
   if (!pic) return;
 
-  const src = gender === 'female' ? stage.f : stage.m;
-  if (src) {
-    pic.innerHTML = `<img src="${src}" alt="">`;
-  } else {
-    pic.textContent = stage.emoji;
-    pic.style.background = stage.color + '33';
-  }
+  pic.textContent = stage.emoji;
+  pic.style.background = stage.color + '33';
 
   const avt = document.getElementById('navAvText');
   if (avt) {
-    avt.textContent =
-      stage.nameRU + ' · ' + total.toLocaleString() + ' pts';
+    avt.textContent = stage.nameRU + ' · ' + total.toLocaleString() + ' pts';
   }
 }
 
@@ -416,7 +398,7 @@ function _buildHCard(h, tk, isBonus) {
     <div class="${wrapCls}" id="hcard-${h.id}">
 
       <div class="hcard-front">
-        <div class="hcard-row" onclick="toggleCheck('${h.id}')">
+        <div class="hcard-row">
           <div class="hcard-done-zone">
             <div class="hcard-done-ico">${backIco}</div>
             <div class="hcard-done-lbl">${isBonus ? 'бонус' : 'готово'}</div>
@@ -440,16 +422,20 @@ function _buildHCard(h, tk, isBonus) {
       <div class="${backCls}">
         <div class="hcard-back-ico">${backIco}</div>
         <div class="hcard-back-info">
+          <div class="hcard-back-name">${h.icon || '⭐'} ${esc(h.name)}</div>
           <div class="hcard-back-title">${backTitle}</div>
           <div class="hcard-back-time">${esc(timeStr) || '—'}</div>
         </div>
-        <button type="button" class="hcard-back-undo"
-                onclick="toggleCheck('${h.id}')">
+        <button type="button" class="hcard-back-undo">
           отменить
         </button>
       </div>
 
     </div>`;
+
+  const hid = h.id;
+  wrap.querySelector('.hcard-row').addEventListener('click', () => toggleCheck(hid));
+  wrap.querySelector('.hcard-back-undo').addEventListener('click', () => toggleCheck(hid));
   return wrap;
 }
 
@@ -517,8 +503,7 @@ function _buildBCard(h, tk) {
             border:0.5px solid ${isClean ? 'var(--accent2)' : isSlipped ? 'var(--bad)' : 'var(--border)'};
             border-radius:var(--r-lg)">
         <div class="bcard-row">
-          <div class="bcard-result-zone"
-               onclick="event.stopPropagation();resetBadCard('${h.id}')">
+          <div class="bcard-result-zone">
             <div class="bcard-result-ico"></div>
             <div class="bcard-result-lbl"></div>
           </div>
@@ -530,17 +515,13 @@ function _buildBCard(h, tk) {
             <div class="${subCls}">${esc(subText)}</div>
           </div>
           <div class="bcard-btns">
-            <button type="button" class="btn-green"
-                    onclick="event.stopPropagation();markBadClean('${h.id}')"
-                    title="Выдержал">
+            <button type="button" class="btn-green" title="Выдержал">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M2.5 7L5.5 10L11.5 4" stroke="var(--accent)"
                   stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </button>
-            <button type="button" class="btn-red"
-                    onclick="event.stopPropagation();openSlip('${h.id}')"
-                    title="Был срыв">
+            <button type="button" class="btn-red" title="Был срыв">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M4 4L10 10M10 4L4 10" stroke="var(--bad)"
                   stroke-width="1.8" stroke-linecap="round"/>
@@ -562,11 +543,11 @@ function _buildBCard(h, tk) {
                   justify-content:center;gap:12px;padding:0 16px">
         <div data-role="back-ico" style="font-size:22px;color:white;flex-shrink:0">${backIco}</div>
         <div style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0">
+          <div data-role="back-name" class="hcard-back-name">${h.icon || '🚫'} ${esc(h.name)}</div>
           <div data-role="back-title" style="font-size:13px;font-weight:500;color:white">${backTitle}</div>
           <div data-role="back-sub" style="font-size:11px;color:rgba(255,255,255,.65)">${backSub}</div>
         </div>
         <button type="button"
-                onclick="event.stopPropagation();resetBadCard('${h.id}')"
                 style="font-size:11px;color:rgba(255,255,255,.5);
                        cursor:pointer;padding:4px 10px;
                        border:0.5px solid rgba(255,255,255,.25);
@@ -577,6 +558,13 @@ function _buildBCard(h, tk) {
       </div>
 
     </div>`;
+
+  const hid = h.id;
+  wrap.querySelector('.bcard-result-zone').addEventListener('click', e => { e.stopPropagation(); resetBadCard(hid); });
+  wrap.querySelector('.btn-green').addEventListener('click', e => { e.stopPropagation(); markBadClean(hid); });
+  wrap.querySelector('.btn-red').addEventListener('click', e => { e.stopPropagation(); openSlip(hid); });
+  const backBtn = wrap.querySelector('[data-face="back"] button');
+  if (backBtn) backBtn.addEventListener('click', e => { e.stopPropagation(); resetBadCard(hid); });
 
   return wrap;
 }

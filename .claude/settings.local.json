@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(json|md|js|ts|html\\)$\")",
+      "Bash(npx --version)",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}

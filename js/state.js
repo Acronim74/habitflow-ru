@@ -2,7 +2,6 @@
 let habits        = [];   // активные привычки
 let archived      = [];   // архивированные
 let earnedBadges  = [];   // id полученных бейджей
-let gender        = null; // 'female' | 'male' | null
 let moodLog       = {};   // { "YYYY-MM-DD": 0..4 }
 let moodEnabled   = false; // дневник настроения вкл/выкл
 /** Карточка «Прогресс дня» (сегменты) на экране «Сегодня» */
@@ -33,7 +32,6 @@ function saveData() {
       habits,
       archived,
       earnedBadges,
-      gender,
       moodLog,
       moodEnabled,
       dayProgressWidgetEnabled,
@@ -43,7 +41,9 @@ function saveData() {
     };
     localStorage.setItem(LS_KEY, JSON.stringify(data));
   } catch (e) {
-    console.error('Ошибка сохранения:', e);
+    if (e.name === 'QuotaExceededError' && typeof showToast === 'function') {
+      showToast('⚠️ Хранилище переполнено — сделай экспорт резервной копии');
+    }
   }
 }
 
@@ -57,7 +57,6 @@ function loadData() {
     habits       = Array.isArray(d.habits)       ? d.habits       : [];
     archived     = Array.isArray(d.archived)     ? d.archived     : [];
     earnedBadges = Array.isArray(d.earnedBadges) ? d.earnedBadges : [];
-    gender       = d.gender || null;
     moodLog      = (d.moodLog && typeof d.moodLog === 'object') ? d.moodLog : {};
     moodEnabled  = d.moodEnabled || false;
     dayProgressWidgetEnabled = d.dayProgressWidgetEnabled === undefined ? true : !!d.dayProgressWidgetEnabled;
@@ -65,8 +64,8 @@ function loadData() {
     seriesWidgetEnabled = d.seriesWidgetEnabled === undefined ? true : !!d.seriesWidgetEnabled;
     _migrateData();
     _syncCleanTodaySetFromData();
-  } catch (e) {
-    console.error('Ошибка загрузки:', e);
+  } catch (_e) {
+    // повреждённые данные — игнорируем, сбрасываем к дефолту
   }
 }
 

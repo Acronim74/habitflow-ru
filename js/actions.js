@@ -141,9 +141,9 @@ function openSlip(habitId) {
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-ghost" onclick="closeSlip()">Отмена</button>
-      <button type="button" class="btn btn-danger"
-              onclick="confirmSlip('${h.id}')">Записать срыв</button>
+      <button type="button" class="btn btn-danger">Записать срыв</button>
     </div>`;
+  modal.querySelector('.btn-danger').addEventListener('click', () => confirmSlip(habitId));
   document.getElementById('slipOverlay').classList.add('open');
 }
 
@@ -506,13 +506,13 @@ function openDelete(habitId) {
       </span>
     </p>
     <div class="modal-footer">
-      <button type="button" class="btn btn-ghost"
-              onclick="archiveHabit('${h.id}')">В архив</button>
+      <button type="button" class="btn btn-ghost js-archive">В архив</button>
       <button type="button" class="btn btn-ghost"
               onclick="closeDelete()">Отмена</button>
-      <button type="button" class="btn btn-danger"
-              onclick="confirmDelete('${h.id}')">Удалить</button>
+      <button type="button" class="btn btn-danger js-delete">Удалить</button>
     </div>`;
+  modal.querySelector('.js-archive').addEventListener('click', () => archiveHabit(h.id));
+  modal.querySelector('.js-delete').addEventListener('click', () => confirmDelete(h.id));
   document.getElementById('deleteOverlay').classList.add('open');
 }
 
@@ -558,7 +558,6 @@ function exportData() {
     habits,
     archived,
     earnedBadges,
-    gender,
     moodLog,
     moodEnabled,
     dayProgressWidgetEnabled,
@@ -577,6 +576,29 @@ function exportData() {
 
 function triggerImport() {
   document.getElementById('importFile').click();
+}
+
+function _sanitizeHabit(h) {
+  if (!h || typeof h !== 'object') return null;
+  const id = (typeof h.id === 'string' && /^[\w-]{1,64}$/.test(h.id)) ? h.id : _uuid();
+  const schedule = Array.isArray(h.schedule)
+    ? h.schedule.filter(n => Number.isInteger(n) && n >= 0 && n <= 6)
+    : null;
+  return {
+    id,
+    name:      typeof h.name === 'string'     ? h.name.slice(0, 200)     : '',
+    icon:      typeof h.icon === 'string'     ? h.icon.slice(0, 10)      : (h.bad ? '🚫' : '⭐'),
+    category:  typeof h.category === 'string' ? h.category.slice(0, 50)  : '',
+    desc:      typeof h.desc === 'string'     ? h.desc.slice(0, 500)     : '',
+    bad:       !!h.bad,
+    schedule:  schedule && schedule.length > 0 ? schedule : null,
+    checks:    (h.checks  && typeof h.checks  === 'object') ? h.checks  : {},
+    slips:     (h.slips   && typeof h.slips   === 'object') ? h.slips   : {},
+    clean:     (h.clean   && typeof h.clean   === 'object') ? h.clean   : {},
+    times:     (h.times   && typeof h.times   === 'object') ? h.times   : {},
+    notes:     (h.notes   && typeof h.notes   === 'object') ? h.notes   : {},
+    createdAt: typeof h.createdAt === 'string' ? h.createdAt : '',
+  };
 }
 
 function importData(event) {
@@ -615,10 +637,9 @@ function importData(event) {
       // Запускаем миграции схемы
       _runMigrations(d);
 
-      habits       = Array.isArray(d.habits)       ? d.habits       : [];
-      archived     = Array.isArray(d.archived)     ? d.archived     : [];
-      earnedBadges = Array.isArray(d.earnedBadges) ? d.earnedBadges : [];
-      gender       = d.gender       || null;
+      habits       = Array.isArray(d.habits)   ? d.habits.map(_sanitizeHabit).filter(Boolean)   : [];
+      archived     = Array.isArray(d.archived) ? d.archived.map(_sanitizeHabit).filter(Boolean) : [];
+      earnedBadges = Array.isArray(d.earnedBadges) ? d.earnedBadges.filter(x => typeof x === 'string') : [];
       moodLog      = (d.moodLog && typeof d.moodLog === 'object') ? d.moodLog : {};
       moodEnabled  = d.moodEnabled  || false;
       dayProgressWidgetEnabled = d.dayProgressWidgetEnabled === undefined ? true : !!d.dayProgressWidgetEnabled;
@@ -631,8 +652,7 @@ function importData(event) {
       renderAll();
       showToast('✓ Загружено: ' + habits.length + ' привычек');
 
-    } catch (err) {
-      console.error('Ошибка импорта:', err);
+    } catch (_err) {
       showToast('Ошибка: файл повреждён или имеет неверный формат');
     }
 
