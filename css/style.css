@@ -2528,7 +2528,7 @@ html.ios-inapp-banner-visible .ob-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  z-index: 190;
+  z-index: 99;
   background: rgba(0,0,0,.15);
 }
 .burger-overlay.open { display: block; }
