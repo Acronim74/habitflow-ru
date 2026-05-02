@@ -1709,6 +1709,10 @@ document.addEventListener('habitflow-install-done', () => {
 });
 
 function loadDemoData() {
+  if (habits.length > 0) {
+    const ok = confirm('Загрузка демо-данных заменит все твои привычки и историю.\nПродолжить?');
+    if (!ok) return;
+  }
   const yesterday = (() => {
     const d = new Date();
     d.setDate(d.getDate() - 1);
