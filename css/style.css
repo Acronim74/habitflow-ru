@@ -1931,100 +1931,88 @@ html.ios-inapp-banner-visible .app {
   .btn-add { display: none !important; }
 }
 
-[data-theme="tron"] {
-  --bg:          #020c18;
-  --surface:     #041220;
-  --border:      #00c8ff18;
-  --border2:     #00c8ff33;
+[data-theme="forest"] {
+  --bg:          #0a1a1c;
+  --surface:     #0e2326;
+  --border:      #2a9d8f18;
+  --border2:     #2a9d8f33;
 
-  --accent:      #00c8ff;
-  --accent2:     #0080aa;
-  --accent3:     #003344;
-  --accent-bg:   #001822;
+  --accent:      #2a9d8f;
+  --accent2:     #066873;
+  --accent3:     #023a40;
+  --accent-bg:   #021c20;
 
-  --bad:         #ff4466;
-  --bad-light:   #661828;
-  --bad-bg:      #220810;
+  --bad:         #f7726c;
+  --bad-light:   #7a2822;
+  --bad-bg:      #200c0b;
 
-  --bonus:       #00c8ff;
-  --bonus-light: #005566;
-  --bonus-bg:    #001822;
+  --bonus:       #c8cdb7;
+  --bonus-light: #5a6050;
+  --bonus-bg:    #181c15;
 
-  --text1: #c8eeff;
-  --text2: #88bbcc;
-  --text3: #00c8ff66;
-  --text4: #00c8ff33;
+  --text1: #c8cdb7;
+  --text2: #7a8a78;
+  --text3: #2a9d8f66;
+  --text4: #2a9d8f33;
 
-  --streak-color: #00c8ff;
-  --hm-lv4:       #00c8ff;
+  --streak-color: #f7726c;
+  --hm-lv4:       #2a9d8f;
 }
 
 /* РўСЂРѕРЅ: С€СЂРёС„С‚ РЅР°РІР±Р°СЂР° */
-[data-theme="tron"] .nav-brand-name {
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-size: 13px;
+[data-theme="forest"] .hcard.hc-active,
+[data-theme="forest"] .hcard.hc-done {
+  box-shadow: 0 0 10px #2a9d8f22;
 }
-[data-theme="tron"] .nav-tab {
-  letter-spacing: 1px;
-  font-size: 11px;
+[data-theme="forest"] .hm-cell.lv3 {
+  box-shadow: 0 0 4px #2a9d8f88;
 }
-[data-theme="tron"] .nav-tab.active {
-  box-shadow: 0 0 12px #00c8ff44;
-}
-[data-theme="tron"] .hcard.hc-active,
-[data-theme="tron"] .hcard.hc-done {
-  box-shadow: 0 0 10px #00c8ff22;
-}
-[data-theme="tron"] .hm-cell.lv3 {
-  box-shadow: 0 0 4px #00c8ff;
-}
-[data-theme="tron"] .hm-cell.lv4 {
-  box-shadow: 0 0 6px #00c8ff;
+[data-theme="forest"] .hm-cell.lv4 {
+  box-shadow: 0 0 6px #2a9d8f;
 }
 
 /* в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ
    BLADE RUNNER
    в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ */
-[data-theme="blade"] {
-  --bg:          #0d0a06;
-  --surface:     #100c07;
-  --border:      #c87a2218;
-  --border2:     #c87a2233;
+[data-theme="veloce"] {
+  --bg:          #0e1a1e;
+  --surface:     #1a2d33;
+  --border:      #ce9d6518;
+  --border2:     #ce9d6533;
 
-  --accent:      #c87a22;
-  --accent2:     #7a4a10;
-  --accent3:     #3a2008;
-  --accent-bg:   #221408;
+  --accent:      #ce9d65;
+  --accent2:     #8a6030;
+  --accent3:     #3a2810;
+  --accent-bg:   #1c1408;
 
-  --bad:         #cc4422;
-  --bad-light:   #661810;
-  --bad-bg:      #220a06;
+  --bad:         #e06855;
+  --bad-light:   #6a2018;
+  --bad-bg:      #1c0a08;
 
-  --bonus:       #c87a22;
-  --bonus-light: #7a4a10;
-  --bonus-bg:    #221408;
+  --bonus:       #ce9d65;
+  --bonus-light: #7a5020;
+  --bonus-bg:    #1c1408;
 
-  --text1: #d4b896;
-  --text2: #a07850;
-  --text3: #c87a2266;
-  --text4: #c87a2233;
+  --text1: #e2e6e7;
+  --text2: #8a9fa5;
+  --text3: #ce9d6566;
+  --text4: #ce9d6533;
 
-  --streak-color: #e8a050;
-  --hm-lv4:       #c87a22;
+  --streak-color: #ce9d65;
+  --hm-lv4:       #ce9d65;
 }
 
-[data-theme="blade"] .nav-tab.active {
-  box-shadow: 0 0 12px #c87a2244;
+[data-theme="veloce"] .nav-tab.active {
+  box-shadow: 0 0 12px #ce9d6544;
 }
-[data-theme="blade"] .hcard.hc-active {
-  box-shadow: 0 0 12px #c87a2233;
+[data-theme="veloce"] .hcard.hc-active {
+  box-shadow: 0 0 12px #ce9d6533;
 }
-[data-theme="blade"] .hm-cell.lv3 {
-  box-shadow: 0 0 4px #c87a2288;
+[data-theme="veloce"] .hm-cell.lv3 {
+  box-shadow: 0 0 4px #ce9d6588;
 }
-[data-theme="blade"] .hm-cell.lv4 {
-  box-shadow: 0 0 6px #c87a22;
+[data-theme="veloce"] .hm-cell.lv4 {
+  box-shadow: 0 0 6px #ce9d65;
 }
 
 /* в”Ђв”Ђ РћРЅР±РѕСЂРґРёРЅРі-РјР°СЃС‚РµСЂ в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ */
@@ -2697,10 +2685,10 @@ html.ios-inapp-banner-visible .ob-overlay {
   white-space: nowrap;
 }
 
-.burger-theme-grid .theme-btn[data-theme="light"]  { color: #e8a020; }
-.burger-theme-grid .theme-btn[data-theme="dark"]   { color: #aaaaaa; }
-.burger-theme-grid .theme-btn[data-theme="tron"]   { color: #00c8ff; }
-.burger-theme-grid .theme-btn[data-theme="blade"]  { color: #c87a22; }
+.burger-theme-grid .theme-btn[data-theme="light"]   { color: #e8a020; }
+.burger-theme-grid .theme-btn[data-theme="dark"]    { color: #aaaaaa; }
+.burger-theme-grid .theme-btn[data-theme="forest"]  { color: #2a9d8f; }
+.burger-theme-grid .theme-btn[data-theme="veloce"]  { color: #ce9d65; }
 
 /* РќР° РџРљ вЂ” Р°РІР°С‚Р°СЂ РІРёРґРµРЅ, Р±СѓСЂРіРµСЂ С‚РѕР¶Рµ */
 /* РќР° РїР»Р°РЅС€РµС‚Рµ Рё С‚РµР»РµС„РѕРЅРµ вЂ” Р°РІР°С‚Р°СЂ СЃРєСЂС‹С‚, Р±СѓСЂРіРµСЂ РІРёРґРµРЅ */
