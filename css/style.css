@@ -1975,31 +1975,31 @@ html.ios-inapp-banner-visible .app {
    BLADE RUNNER
    в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ */
 [data-theme="veloce"] {
-  --bg:          #0e1a1e;
-  --surface:     #1a2d33;
-  --border:      #ce9d6518;
-  --border2:     #ce9d6533;
+  --bg:          #f0f2f3;
+  --surface:     #e2e6e7;
+  --border:      #1a2d3315;
+  --border2:     #1a2d3328;
 
-  --accent:      #ce9d65;
-  --accent2:     #8a6030;
-  --accent3:     #3a2810;
-  --accent-bg:   #1c1408;
+  --accent:      #9a6828;
+  --accent2:     #ce9d65;
+  --accent3:     #f0e0c0;
+  --accent-bg:   #f8f0e0;
 
-  --bad:         #e06855;
-  --bad-light:   #6a2018;
-  --bad-bg:      #1c0a08;
+  --bad:         #c83020;
+  --bad-light:   #f0c0b8;
+  --bad-bg:      #fdf0ee;
 
-  --bonus:       #ce9d65;
-  --bonus-light: #7a5020;
-  --bonus-bg:    #1c1408;
+  --bonus:       #9a6828;
+  --bonus-light: #f0d8a8;
+  --bonus-bg:    #f8f0e0;
 
-  --text1: #e2e6e7;
-  --text2: #8a9fa5;
-  --text3: #ce9d6566;
-  --text4: #ce9d6533;
+  --text1: #1a2d33;
+  --text2: #5a7080;
+  --text3: #1a2d3360;
+  --text4: #1a2d3330;
 
-  --streak-color: #ce9d65;
-  --hm-lv4:       #ce9d65;
+  --streak-color: #9a6828;
+  --hm-lv4:       #9a6828;
 }
 
 [data-theme="veloce"] .nav-tab.active {
