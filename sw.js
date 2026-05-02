@@ -19,11 +19,11 @@ const ASSETS = [
   BASE + '/icons/icon-512.png',
 ];
 
-// Установка — кэшируем все файлы
+// Установка — кэшируем все файлы, минуя HTTP-кеш
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE)
-      .then(cache => cache.addAll(ASSETS))
+      .then(cache => cache.addAll(ASSETS.map(url => new Request(url, { cache: 'reload' }))))
       .then(() => self.skipWaiting())
   );
 });
