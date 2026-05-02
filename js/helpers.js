@@ -235,6 +235,7 @@ function checkBadges() {
 }
 
 function _checkChampion() {
+  if (!habits.some(h => !h.bad)) return false;
   const y = TODAY.getFullYear();
   const m = TODAY.getMonth();
   for (let d = 1; d < TODAY.getDate(); d++) {
