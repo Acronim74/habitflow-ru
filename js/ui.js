@@ -2152,6 +2152,20 @@ function setTheme(theme, save = true) {
   }
 }
 
+function _loadBurgerVersion() {
+  const el = document.getElementById('burgerVersion');
+  if (!el) return;
+  fetch('sw.js', { method: 'HEAD', cache: 'no-cache' })
+    .then(r => {
+      const raw = r.headers.get('last-modified');
+      if (!raw) return;
+      const d = new Date(raw);
+      const fmt = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+      el.textContent = 'Обновлено ' + fmt;
+    })
+    .catch(() => {});
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   loadData();
 
@@ -2180,6 +2194,7 @@ document.addEventListener('DOMContentLoaded', () => {
   _syncNetworkStatusUI(false);
 
   _initIOSInAppBanner();
+  _loadBurgerVersion();
 
   window.addEventListener('online', () => _syncNetworkStatusUI(true));
   window.addEventListener('offline', () => _syncNetworkStatusUI(true));
