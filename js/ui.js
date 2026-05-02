@@ -1709,10 +1709,6 @@ document.addEventListener('habitflow-install-done', () => {
 });
 
 function loadDemoData() {
-  if (habits.length > 0) {
-    const ok = confirm('Загрузка демо-данных заменит все твои привычки и историю.\nПродолжить?');
-    if (!ok) return;
-  }
   const yesterday = (() => {
     const d = new Date();
     d.setDate(d.getDate() - 1);
@@ -1724,25 +1720,42 @@ function loadDemoData() {
     return _dateKey(d);
   })();
 
-  habits = JSON.parse(JSON.stringify(DEMO_HABITS));
-  habits.forEach(h => { h.createdAt = twoDaysAgo; });
+  const existingIds = new Set(habits.map(h => h.id));
+  const toAdd = DEMO_HABITS
+    .filter(h => !existingIds.has(h.id))
+    .map(h => {
+      const copy = JSON.parse(JSON.stringify(h));
+      copy.createdAt = twoDaysAgo;
+      return copy;
+    });
 
-  habits[0].checks[twoDaysAgo] = true;
-  habits[0].checks[yesterday]  = true;
-  habits[1].checks[yesterday]  = true;
-  habits[2].checks[twoDaysAgo] = true;
-  habits[2].checks[yesterday]  = true;
+  if (toAdd.length === 0) {
+    showToast('Демо-данные уже установлены!');
+    return;
+  }
 
-  archived     = [];
-  earnedBadges = [];
-  moodLog      = { [yesterday]: 3, [twoDaysAgo]: 2 };
-  moodEnabled  = true;
+  toAdd.forEach(h => {
+    if (h.id === 'demo-1') { h.checks[twoDaysAgo] = true; h.checks[yesterday] = true; }
+    if (h.id === 'demo-2') { h.checks[yesterday]  = true; }
+    if (h.id === 'demo-3') { h.checks[twoDaysAgo] = true; h.checks[yesterday] = true; }
+  });
+
+  habits.push(...toAdd);
+
+  if (!moodEnabled) {
+    moodEnabled = true;
+    moodLog[yesterday]  = moodLog[yesterday]  ?? 3;
+    moodLog[twoDaysAgo] = moodLog[twoDaysAgo] ?? 2;
+  }
 
   _migrateData();
   _syncCleanTodaySetFromData();
   saveData();
   obSkip();
-  showToast('Демо-данные загружены · добавь свои привычки!');
+  const msg = toAdd.length === DEMO_HABITS.length
+    ? 'Демо-данные загружены · добавь свои привычки!'
+    : `Восстановлено ${toAdd.length} демо-привычек`;
+  showToast(msg);
 }
 
 function _obSteps() {
