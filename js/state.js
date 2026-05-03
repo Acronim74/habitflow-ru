@@ -106,6 +106,11 @@ function _migrateData() {
     }
   });
   if (moodMigrateDirty) saveData();
+
+  // Чистим значок "Чемпион", если он был выдан по старому багу
+  if (earnedBadges.includes('champion') && !_checkChampion()) {
+    earnedBadges = earnedBadges.filter(id => id !== 'champion');
+  }
 }
 
 // ── Миграции схемы данных ──────────────────
