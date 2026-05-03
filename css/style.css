@@ -2530,6 +2530,9 @@ html.ios-inapp-banner-visible .ob-overlay {
   inset: 0;
   z-index: 99;
   background: rgba(0,0,0,.15);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 .burger-overlay.open { display: block; }
 

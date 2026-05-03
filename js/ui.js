@@ -2196,14 +2196,12 @@ document.addEventListener('DOMContentLoaded', () => {
   _initIOSInAppBanner();
   _loadBurgerVersion();
 
-  const _onOutsideBurger = e => {
+  document.addEventListener('click', e => {
     const drawer = document.getElementById('burgerDrawer');
     const btn    = document.getElementById('burgerBtn');
     if (!drawer || !drawer.classList.contains('open')) return;
     if (!drawer.contains(e.target) && !btn.contains(e.target)) closeBurger();
-  };
-  document.addEventListener('click',      _onOutsideBurger);
-  document.addEventListener('touchstart', _onOutsideBurger, { passive: true });
+  });
 
   window.addEventListener('online', () => _syncNetworkStatusUI(true));
   window.addEventListener('offline', () => _syncNetworkStatusUI(true));
