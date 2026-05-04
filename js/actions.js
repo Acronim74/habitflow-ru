@@ -177,6 +177,55 @@ function closeSlip(e) {
   document.getElementById('slipOverlay').classList.remove('open');
 }
 
+// ── Заметки к привычкам ─────────────────────
+
+function openComment(habitId) {
+  const h = habits.find(x => x.id === habitId);
+  if (!h) return;
+  const tk = _todayKey();
+  const existing = h.notes?.[tk]?.comment || '';
+  const modal = document.getElementById('commentModal');
+  modal.innerHTML = `
+    <div class="modal-title">Заметка к привычке</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">${esc(h.icon || '⭐')} ${esc(h.name)}</p>
+    <div class="field">
+      <label class="field-label">Как прошло? Что помогло?</label>
+      <textarea class="field-input" id="commentText" rows="4"
+                placeholder="Сегодня всё прошло хорошо..."
+                style="resize:vertical;min-height:80px">${esc(existing)}</textarea>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-ghost" onclick="closeComment()">Отмена</button>
+      <button type="button" class="btn btn-primary" id="commentSaveBtn">Сохранить</button>
+    </div>`;
+  modal.querySelector('#commentSaveBtn').addEventListener('click', () => saveComment(habitId));
+  document.getElementById('commentOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('commentText')?.focus(), 50);
+}
+
+function saveComment(habitId) {
+  const h = habits.find(x => x.id === habitId);
+  if (!h) return;
+  const tk = _todayKey();
+  const text = (document.getElementById('commentText')?.value || '').trim();
+  if (!h.notes) h.notes = {};
+  if (!h.notes[tk]) h.notes[tk] = {};
+  if (text) {
+    h.notes[tk].comment = text;
+  } else {
+    delete h.notes[tk].comment;
+    if (Object.keys(h.notes[tk]).length === 0) delete h.notes[tk];
+  }
+  saveData();
+  closeComment();
+  renderToday();
+}
+
+function closeComment(e) {
+  if (e && e.target !== document.getElementById('commentOverlay')) return;
+  document.getElementById('commentOverlay').classList.remove('open');
+}
+
 // ── Настроение ─────────────────────────────
 
 function saveMood(idx, tk) {

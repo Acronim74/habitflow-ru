@@ -1,7 +1,7 @@
 // ── Навигация ─────────────────────────────
 
 let _obStep = 0;
-const _OB_TOTAL = 8;
+const _OB_TOTAL = 9;
 const _ONBOARDING_DONE_KEY = 'habitflow_onboarding_done';
 let _lastNetworkOnline = null;
 
@@ -24,6 +24,7 @@ window.addEventListener('appinstalled', () => {
 const _OB_HEADINGS = [
   'ПРИВЕТСТВИЕ',
   'ОТМЕТКИ',
+  'ЗАМЕТКИ',
   'СОЗДАНИЕ ПРИВЫЧКИ',
   'СЕРИИ И ОЧКИ',
   'АНАЛИТИКА И ЗНАЧКИ',
@@ -1801,6 +1802,37 @@ function _obSteps() {
        <div class="ob-hint-ico">💡</div>
        <div class="ob-hint-text">Для вредных привычек — две кнопки:
          ✓ Выдержал или ✕ Был срыв.</div>
+     </div>`,
+
+    `<div class="ob-ico">💬</div>
+     <div class="ob-title">Заметки к привычкам</div>
+     <div class="ob-text">После выполнения привычки появляется кнопка 💬 — нажми чтобы записать короткий комментарий о том как всё прошло.</div>
+     <div class="ob-preview" style="flex-direction:column;align-items:stretch;gap:8px">
+       <div class="ob-card-back" style="border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px">
+         <div class="ob-card-back-ico">✓</div>
+         <div style="flex:1">
+           <div class="ob-card-back-title">Выполнено!</div>
+           <div class="ob-card-back-time">07:24</div>
+         </div>
+         <div style="display:flex;flex-direction:column;gap:5px;align-items:center">
+           <div style="font-size:14px;border:0.5px solid rgba(255,255,255,.3);border-radius:6px;padding:2px 7px;cursor:pointer">💬</div>
+           <div class="ob-card-back-undo">отменить</div>
+         </div>
+       </div>
+       <div class="ob-card-back" style="border-radius:10px;padding:10px 14px;background:var(--surface)">
+         <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px">
+           💬 2 заметки <span style="margin-left:auto">▾</span>
+         </div>
+         <div style="margin-top:6px;font-size:11px;color:var(--text2)">
+           <div style="padding:3px 0;border-bottom:0.5px solid var(--border)">3 мая · Встал легко, не стал откладывать</div>
+           <div style="padding:3px 0">2 мая · Дождь, пробежал по парку</div>
+         </div>
+       </div>
+     </div>
+     <div class="ob-hint">
+       <div class="ob-hint-ico">💡</div>
+       <div class="ob-hint-text">Накопленные заметки видны под карточкой —
+         разворачиваются по клику. Помогают замечать закономерности.</div>
      </div>`,
 
     `<div class="ob-ico-plus" aria-hidden="true">+</div>
