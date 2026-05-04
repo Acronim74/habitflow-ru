@@ -223,9 +223,17 @@ function renderToday() {
 
   const goodList = document.getElementById('goodList');
   goodList.innerHTML = '';
-  _sortHabits(scheduled).forEach(h => {
-    goodList.appendChild(_buildHCard(h, tk, false));
-  });
+  const _sorted  = _sortHabits(scheduled);
+  const _undone  = _sorted.filter(h => !h.checks?.[tk]);
+  const _done    = _sorted.filter(h =>  h.checks?.[tk]);
+  _undone.forEach(h => goodList.appendChild(_buildHCard(h, tk, false)));
+  if (_undone.length > 0 && _done.length > 0) {
+    const sep = document.createElement('div');
+    sep.className = 'habit-done-sep';
+    sep.innerHTML = '<span>выполнено</span>';
+    goodList.appendChild(sep);
+  }
+  _done.forEach(h => goodList.appendChild(_buildHCard(h, tk, false)));
 
   if (bonuses.length > 0) {
     const bonusList = document.getElementById('bonusList');
@@ -290,17 +298,16 @@ function _patchAllGoodHCards(tk) {
 }
 
 function _reorderGoodListIfNeeded(tk) {
-  // Карточки остаются на своих местах — не перемещаем после флипа
   const list = document.getElementById('goodList');
   if (!list) return false;
   const good = habits.filter(h => !h.bad);
-  const scheduled = good.filter(h => _isWorkDay(h, tk));
-  // Проверяем только что все карточки есть в DOM
-  for (const h of scheduled) {
-    const inner = document.getElementById('hcard-' + h.id);
-    if (!inner) return false;
-    const wrap = inner.closest('.hcard-flip-wrap');
-    if (!wrap || wrap.parentNode !== list) return false;
+  const scheduled = _sortHabits(good.filter(h => _isWorkDay(h, tk)));
+  // Проверяем порядок: если не совпадает — нужна полная перерисовка
+  const wraps = Array.from(list.querySelectorAll(':scope > .hcard-flip-wrap'));
+  if (wraps.length !== scheduled.length) return false;
+  for (let i = 0; i < scheduled.length; i++) {
+    const inner = wraps[i].querySelector('.hcard');
+    if (!inner || inner.id !== 'hcard-' + scheduled[i].id) return false;
   }
   return true;
 }

@@ -1541,6 +1541,25 @@ html.ios-inapp-banner-visible .app {
   border-color: rgba(255,255,255,.55);
 }
 
+.habit-done-sep {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+  color: var(--text3);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.habit-done-sep::before,
+.habit-done-sep::after {
+  content: '';
+  flex: 1;
+  height: 0.5px;
+  background: var(--border);
+}
+
 .hcard-notes {
   margin-top: 2px;
 }
