@@ -1541,6 +1541,123 @@ html.ios-inapp-banner-visible .app {
   border-color: rgba(255,255,255,.55);
 }
 
+/* ── Карточка управления привычкой ── */
+.habit-manage-card {
+  cursor: pointer;
+  transition: background .15s;
+}
+.habit-manage-card:hover {
+  background: var(--accent-bg);
+}
+
+/* ── Детальный вид привычки ── */
+.habit-detail-modal {
+  max-height: 85vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.hdetail-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.hdetail-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  min-width: 0;
+}
+
+.hdetail-ico {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.hdetail-desc {
+  font-size: 13px;
+  color: var(--text2);
+  margin: 0 0 14px;
+  line-height: 1.5;
+  padding: 10px 12px;
+  background: var(--accent-bg);
+  border-radius: var(--r-md);
+  border-left: 2px solid var(--accent);
+}
+
+.hdetail-stats {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.hdetail-stat {
+  flex: 1;
+  text-align: center;
+  padding: 10px 8px;
+  background: var(--accent-bg);
+  border-radius: var(--r-md);
+}
+
+.hdetail-stat-val {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.hdetail-stat-lbl {
+  font-size: 10px;
+  color: var(--text3);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hdetail-journal-head {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+  padding-top: 4px;
+  border-top: 0.5px solid var(--border);
+}
+
+.hdetail-journal {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hdetail-note {
+  padding: 8px 0;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.hdetail-note:last-child {
+  border-bottom: none;
+}
+
+.hdetail-note-date {
+  font-size: 11px;
+  color: var(--text3);
+  margin-bottom: 3px;
+}
+
+.hdetail-note-text {
+  font-size: 13px;
+  color: var(--text1);
+  line-height: 1.45;
+}
+
 .habit-done-sep {
   display: flex;
   align-items: center;

@@ -417,66 +417,114 @@ function toggleSeriesWidget() {
 function _buildHabitManageCard(h) {
   const streak = h.bad ? calcCleanStreakAt(h, _todayKey()) : calcStreak(h);
   const best   = bestStreak(h);
+  const notesCount = Object.values(h.notes || {}).filter(n => n.comment).length;
   const div = document.createElement('div');
-  div.className = 'panel panel-body';
-  div.style.cursor = 'default';
+  div.className = 'panel panel-body habit-manage-card';
   div.innerHTML = `
     <div class="flex" style="justify-content:space-between;align-items:flex-start">
-      <div class="flex gap-8 items-center">
-        <span style="font-size:20px">${h.icon || '⭐'}</span>
-        <div>
+      <div class="flex gap-8 items-center" style="min-width:0;flex:1;cursor:pointer">
+        <span style="font-size:20px;flex-shrink:0">${h.icon || '⭐'}</span>
+        <div style="min-width:0">
           <div style="font-size:13px;font-weight:500">${esc(h.name)}</div>
           <div style="font-size:11px;color:var(--text3);margin-top:2px">
-            ${esc(h.category || '')}${esc(scheduleLabel(h))}
+            ${esc(h.category || '')}${esc(scheduleLabel(h))}${notesCount > 0 ? ` · 💬 ${notesCount}` : ''}
           </div>
         </div>
       </div>
-      <div class="flex gap-6">
+      <div class="flex gap-6" style="flex-shrink:0;margin-left:8px">
         <button type="button" class="btn btn-ghost"
                 style="font-size:12px;padding:5px 10px">Изменить</button>
         <button type="button" class="btn btn-ghost"
                 style="font-size:12px;padding:5px 10px">Удалить</button>
       </div>
     </div>
-    <div class="flex gap-12 mt-8" style="font-size:12px;color:var(--text3)">
-      <span>${h.bad ? '🛡️' : '🔥'} Личный рекорд: ${streak} дн.</span>
+    <div class="flex gap-12 mt-8" style="font-size:12px;color:var(--text3);cursor:pointer">
+      <span>${h.bad ? '🛡️' : '🔥'} Серия: ${streak} дн.</span>
       <span>🏆 Рекорд: ${best} дн.</span>
     </div>`;
-  const [editBtn, deleteBtn] = div.querySelectorAll('.flex.gap-6 .btn');
-  editBtn.addEventListener('click', () => openEdit(h.id));
-  deleteBtn.addEventListener('click', () => openDelete(h.id));
 
-  const allComments = Object.entries(h.notes || {})
+  const [editBtn, deleteBtn] = div.querySelectorAll('.flex.gap-6 .btn');
+  editBtn.addEventListener('click', e => { e.stopPropagation(); openEdit(h.id); });
+  deleteBtn.addEventListener('click', e => { e.stopPropagation(); openDelete(h.id); });
+
+  // Клик по карточке (кроме кнопок) открывает детальный вид
+  div.addEventListener('click', () => openHabitDetail(h.id));
+
+  return div;
+}
+
+function openHabitDetail(habitId) {
+  const h = habits.find(x => x.id === habitId);
+  if (!h) return;
+
+  const streak = h.bad ? calcCleanStreakAt(h, _todayKey()) : calcStreak(h);
+  const best   = bestStreak(h);
+
+  const comments = Object.entries(h.notes || {})
     .filter(([, note]) => note.comment)
     .sort(([a], [b]) => b.localeCompare(a));
 
-  if (allComments.length > 0) {
-    const n = allComments.length;
-    const label = n === 1 ? '1 заметка' : n < 5 ? `${n} заметки` : `${n} заметок`;
-    const listHtml = allComments.map(([dk, note]) => {
-      const d = new Date(dk + 'T00:00:00');
-      const dateStr = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
-      return `<div class="hcard-note-item">
-        <span class="hcard-note-date">${dateStr}</span>
-        <span class="hcard-note-text">${esc(note.comment)}</span>
-      </div>`;
-    }).join('');
-    const notesEl = document.createElement('div');
-    notesEl.className = 'hcard-notes';
-    notesEl.style.borderTop = '0.5px solid var(--border)';
-    notesEl.style.marginTop = '8px';
-    notesEl.innerHTML = `
-      <button type="button" class="hcard-notes-toggle">
-        💬 ${label}<span class="hcard-notes-chevron">▾</span>
-      </button>
-      <div class="hcard-notes-list">${listHtml}</div>`;
-    notesEl.querySelector('.hcard-notes-toggle').addEventListener('click', () => {
-      notesEl.classList.toggle('open');
-    });
-    div.appendChild(notesEl);
-  }
+  const journalHtml = comments.length > 0
+    ? comments.map(([dk, note]) => {
+        const d = new Date(dk + 'T00:00:00');
+        const dateStr = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+        return `<div class="hdetail-note">
+          <div class="hdetail-note-date">${dateStr}</div>
+          <div class="hdetail-note-text">${esc(note.comment)}</div>
+        </div>`;
+      }).join('')
+    : `<div style="font-size:12px;color:var(--text3);padding:8px 0">
+         Заметок пока нет. Отметь привычку и нажми 💬 чтобы добавить.
+       </div>`;
 
-  return div;
+  const modal = document.getElementById('habitDetailModal');
+  modal.innerHTML = `
+    <div class="hdetail-head">
+      <div class="hdetail-title">
+        <span class="hdetail-ico">${h.icon || '⭐'}</span>
+        <span>${esc(h.name)}</span>
+      </div>
+      <div class="flex gap-6">
+        <button type="button" class="btn btn-ghost"
+                style="font-size:12px;padding:5px 10px" id="hdetailEditBtn">Изменить</button>
+        <button type="button" class="btn btn-ghost"
+                style="font-size:12px;padding:5px 10px" id="hdetailDeleteBtn">Удалить</button>
+      </div>
+    </div>
+
+    ${h.desc ? `<p class="hdetail-desc">${esc(h.desc)}</p>` : ''}
+
+    <div class="hdetail-stats">
+      <div class="hdetail-stat">
+        <div class="hdetail-stat-val">${streak}</div>
+        <div class="hdetail-stat-lbl">${h.bad ? 'дней чисто' : 'дней подряд'}</div>
+      </div>
+      <div class="hdetail-stat">
+        <div class="hdetail-stat-val">${best}</div>
+        <div class="hdetail-stat-lbl">личный рекорд</div>
+      </div>
+      <div class="hdetail-stat">
+        <div class="hdetail-stat-val">${comments.length}</div>
+        <div class="hdetail-stat-lbl">заметок</div>
+      </div>
+    </div>
+
+    <div class="hdetail-journal-head">Журнал заметок</div>
+    <div class="hdetail-journal">${journalHtml}</div>`;
+
+  modal.querySelector('#hdetailEditBtn').addEventListener('click', () => {
+    closeHabitDetail(); openEdit(habitId);
+  });
+  modal.querySelector('#hdetailDeleteBtn').addEventListener('click', () => {
+    closeHabitDetail(); openDelete(habitId);
+  });
+
+  document.getElementById('habitDetailOverlay').classList.add('open');
+}
+
+function closeHabitDetail(e) {
+  if (e && e.target !== document.getElementById('habitDetailOverlay')) return;
+  document.getElementById('habitDetailOverlay').classList.remove('open');
 }
 
 // ── Экран Аналитика ───────────────────────

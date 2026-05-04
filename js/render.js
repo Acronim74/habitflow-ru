@@ -382,9 +382,6 @@ function _buildHCard(h, tk, isBonus) {
         { hour:'2-digit', minute:'2-digit' })
     : '';
 
-  const allComments = Object.entries(h.notes || {})
-    .filter(([, note]) => note.comment)
-    .sort(([a], [b]) => b.localeCompare(a));
 
   let wrapCls = 'hcard';
   if (isBonus && isDone)   wrapCls += ' hc-bonus-done';
@@ -452,31 +449,6 @@ function _buildHCard(h, tk, isBonus) {
     e.stopPropagation();
     openComment(hid);
   });
-
-  if (allComments.length > 0) {
-    const n = allComments.length;
-    const label = n === 1 ? '1 заметка' : n < 5 ? `${n} заметки` : `${n} заметок`;
-    const listHtml = allComments.map(([dk, note]) => {
-      const d = new Date(dk + 'T00:00:00');
-      const dateStr = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
-      return `<div class="hcard-note-item">
-        <span class="hcard-note-date">${dateStr}</span>
-        <span class="hcard-note-text">${esc(note.comment)}</span>
-      </div>`;
-    }).join('');
-    const notesEl = document.createElement('div');
-    notesEl.className = 'hcard-notes';
-    notesEl.innerHTML = `
-      <button type="button" class="hcard-notes-toggle">
-        💬 ${label}<span class="hcard-notes-chevron">▾</span>
-      </button>
-      <div class="hcard-notes-list">${listHtml}</div>`;
-    notesEl.querySelector('.hcard-notes-toggle').addEventListener('click', e => {
-      e.stopPropagation();
-      notesEl.classList.toggle('open');
-    });
-    wrap.appendChild(notesEl);
-  }
 
   return wrap;
 }
