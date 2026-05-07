@@ -420,6 +420,7 @@ function _buildHCard(h, tk, isBonus) {
           </div>
           <div class="hcard-check-zone">
             <div class="hcard-btn"></div>
+            <button type="button" class="hcard-front-comment" title="Заметка">💬</button>
           </div>
         </div>
         <div class="hcard-bar-track">
@@ -445,6 +446,10 @@ function _buildHCard(h, tk, isBonus) {
   const hid = h.id;
   wrap.querySelector('.hcard-row').addEventListener('click', () => toggleCheck(hid));
   wrap.querySelector('.hcard-back-undo').addEventListener('click', () => toggleCheck(hid));
+  wrap.querySelector('.hcard-front-comment').addEventListener('click', e => {
+    e.stopPropagation();
+    openComment(hid);
+  });
   wrap.querySelector('.hcard-back-comment').addEventListener('click', e => {
     e.stopPropagation();
     openComment(hid);
