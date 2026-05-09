@@ -2318,30 +2318,36 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('offline', () => _syncNetworkStatusUI(true));
 
   if ('serviceWorker' in navigator) {
+    let _swReloading = false;
+
+    // Слушаем смену контроллера до load, чтобы не пропустить быстрое обновление
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (_swReloading) return;
+      _swReloading = true;
+      window.location.reload();
+    });
+
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js')
         .then(reg => {
-          // Проверяем обновления каждый раз при открытии
-          reg.update();
+          // Если SW уже ждёт активации (например, с прошлого раза) — применяем сразу
+          if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
 
-          // Когда новый SW готов — перезагружаем страницу
           reg.addEventListener('updatefound', () => {
             const newSW = reg.installing;
             if (!newSW) return;
             newSW.addEventListener('statechange', () => {
-              if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
-                // Новая версия готова — тихо применяем
-                newSW.postMessage('SKIP_WAITING');
-              }
+              if (newSW.state === 'installed') newSW.postMessage('SKIP_WAITING');
             });
+          });
+
+          // Проверяем обновление при каждом открытии и при возврате на вкладку
+          reg.update();
+          document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') reg.update();
           });
         })
         .catch(() => {});
-
-      // Перезагружаем когда SW поменялся
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        window.location.reload();
-      });
     });
   }
 });
