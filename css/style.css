@@ -1979,13 +1979,6 @@ html.ios-inapp-banner-visible .app {
     transform: translateZ(0);
   }
 
-  .burger-drawer {
-    position: fixed;
-    top: 52px;
-    right: 0;
-    max-height: calc(100dvh - 52px - 60px - env(safe-area-inset-bottom, 0px));
-  }
-
   .bottom-nav-item {
     flex: 1;
     display: flex;
@@ -2834,6 +2827,15 @@ html.ios-inapp-banner-visible .ob-overlay {
   transform: translateY(0);
   opacity: 1;
   pointer-events: auto;
+}
+
+@media (max-width: 480px) {
+  .burger-drawer {
+    position: fixed;
+    top: 52px;
+    right: 0;
+    max-height: calc(100dvh - 52px - 60px - env(safe-area-inset-bottom, 0px));
+  }
 }
 
 .burger-section {
