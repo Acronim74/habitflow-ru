@@ -2819,6 +2819,9 @@ html.ios-inapp-banner-visible .ob-overlay {
   pointer-events: none;
   transition: transform .2s cubic-bezier(.4, 0, .2, 1),
               opacity .2s ease;
+  max-height: calc(100dvh - 56px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .burger-drawer.open {
   transform: translateY(0);
