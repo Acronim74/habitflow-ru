@@ -1882,6 +1882,114 @@ document.addEventListener('habitflow-install-done', () => {
   if (_obStep === _OB_INSTALL_STEP) _obSetupInstallStep();
 });
 
+function _detectBrowserForInstall() {
+  const ua = navigator.userAgent;
+  const isIOS     = /iPhone|iPad|iPod/i.test(ua);
+  const isMac     = /Macintosh/i.test(ua) && !/iPhone|iPad/i.test(ua);
+  const isAndroid = /Android/i.test(ua);
+
+  if (/VKONTAKTE|VKWebView/i.test(ua)) return { name: 'ВКонтакте',      type: 'inapp-vk' };
+  if (/Instagram/i.test(ua))           return { name: 'Instagram',       type: 'inapp' };
+  if (/FBAN|FBAV/i.test(ua))           return { name: 'Facebook',        type: 'inapp' };
+  if (/Telegram/i.test(ua))            return { name: 'Telegram',        type: 'inapp' };
+
+  if (isIOS) {
+    if (/CriOS/i.test(ua))  return { name: 'Chrome (iOS)',  type: 'ios-other' };
+    if (/FxiOS/i.test(ua))  return { name: 'Firefox (iOS)', type: 'ios-other' };
+    if (/EdgiOS/i.test(ua)) return { name: 'Edge (iOS)',    type: 'ios-other' };
+    return { name: 'Safari', type: 'ios-safari' };
+  }
+
+  if (_deferredInstallPrompt) {
+    if (/SamsungBrowser/i.test(ua)) return { name: 'Samsung Internet', type: 'native' };
+    if (/Edg\//i.test(ua))          return { name: 'Edge',             type: 'native' };
+    return { name: 'Chrome', type: 'native' };
+  }
+
+  if (/Firefox/i.test(ua)) return { name: 'Firefox', type: 'firefox' };
+  if (isMac && /Safari/i.test(ua) && !/Chrome/i.test(ua)) return { name: 'Safari (macOS)', type: 'safari-mac' };
+  if (isAndroid) return { name: 'Chrome', type: 'android-manual' };
+  return { name: 'браузер', type: 'other' };
+}
+
+function showInstallHelp() {
+  if (_isPwaStandalone()) { showToast('Приложение уже установлено.'); return; }
+
+  const { name, type } = _detectBrowserForInstall();
+  const overlay = document.getElementById('installHelpOverlay');
+  const content = document.getElementById('installHelpContent');
+  if (!overlay || !content) return;
+
+  const iosSafariSteps = [
+    '📤 Нажмите «Поделиться» внизу экрана',
+    '⬇️ Прокрутите список действий вниз',
+    '➕ Нажмите «На экран "Домой"»',
+    '✅ Нажмите «Добавить»',
+  ];
+
+  let note = '', stepsList = [], showNativeBtn = false;
+
+  switch (type) {
+    case 'native':
+      showNativeBtn = true;
+      note = 'Нажмите кнопку ниже — браузер предложит установить приложение.';
+      break;
+    case 'ios-safari':
+      stepsList = iosSafariSteps;
+      break;
+    case 'ios-other':
+      note = `${name} на iOS не поддерживает установку PWA.<br>Откройте страницу в <strong>Safari</strong>, затем:`;
+      stepsList = iosSafariSteps;
+      break;
+    case 'inapp-vk':
+      note = 'Встроенный браузер ВКонтакте не поддерживает установку.';
+      stepsList = ['··· → «Открыть в браузере»', '📤 В Safari нажмите «Поделиться»', '➕ «На экран "Домой"» → «Добавить»'];
+      break;
+    case 'inapp':
+      note = 'Встроенный браузер не поддерживает установку.';
+      stepsList = ['··· → «Открыть в Safari» / «Открыть в браузере»', '📤 В Safari нажмите «Поделиться»', '➕ «На экран "Домой"» → «Добавить»'];
+      break;
+    case 'firefox':
+      stepsList = ['⋮ Меню в правом верхнем углу', '📲 «Установить»'];
+      break;
+    case 'safari-mac':
+      stepsList = ['Меню «Файл» в Safari', '📲 «Добавить в Dock»'];
+      break;
+    case 'android-manual':
+      stepsList = ['⋮ Меню в правом верхнем углу', '📲 «Установить приложение» или «Добавить на главный экран»'];
+      break;
+    default:
+      stepsList = ['📲 Значок установки в адресной строке', 'или меню браузера → «Установить приложение»'];
+  }
+
+  const stepsHtml = stepsList.length
+    ? `<ol class="ih-steps">${stepsList.map(s => `<li>${s}</li>`).join('')}</ol>` : '';
+
+  content.innerHTML = `
+    <div class="ih-browser-label">${name}</div>
+    ${note ? `<p class="ih-note">${note}</p>` : ''}
+    ${stepsHtml}
+    ${showNativeBtn ? `<button type="button" class="btn btn-primary ih-install-btn" id="ihNativeBtn">Установить</button>` : ''}
+  `;
+
+  if (showNativeBtn) {
+    document.getElementById('ihNativeBtn').addEventListener('click', () => {
+      closeInstallHelp();
+      if (_deferredInstallPrompt) {
+        const ev = _deferredInstallPrompt;
+        _deferredInstallPrompt = null;
+        ev.prompt();
+      }
+    });
+  }
+  overlay.classList.add('open');
+}
+
+function closeInstallHelp(e) {
+  if (e && e.target !== document.getElementById('installHelpOverlay')) return;
+  document.getElementById('installHelpOverlay').classList.remove('open');
+}
+
 function loadDemoData() {
   const yesterday = (() => {
     const d = new Date();

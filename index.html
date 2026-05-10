@@ -214,7 +214,7 @@
           <span>Знакомство с приложением</span>
         </button>
         <button type="button" class="burger-item"
-                onclick="closeBurger();pwaTryInstall()">
+                onclick="closeBurger();showInstallHelp()">
           <span class="burger-item-ico">📲</span>
           <span>Установить приложение</span>
         </button>
@@ -480,6 +480,16 @@
               onclick="closeGuide()">Закрыть</button>
     </div>
     <div class="guide-body" id="guideBody"></div>
+  </div>
+</div>
+
+<div class="overlay" id="installHelpOverlay" onclick="closeInstallHelp(event)">
+  <div class="modal install-help-modal" onclick="event.stopPropagation()">
+    <div class="ih-head">
+      <span class="ih-title">Установить приложение</span>
+      <button type="button" class="ih-close" onclick="closeInstallHelp()" aria-label="Закрыть">✕</button>
+    </div>
+    <div id="installHelpContent"></div>
   </div>
 </div>
 
