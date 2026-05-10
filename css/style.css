@@ -2211,31 +2211,41 @@ html.ios-inapp-banner-visible .app {
    РўРЃРњРќРђРЇ РўР•РњРђ
    в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ */
 [data-theme="dark"] {
-  --bg:          #141414;
-  --surface:     #1e1e1e;
-  --border:      #2a2a2a;
-  --border2:     #383838;
+  --bg:          #09235E;
+  --surface:     #0f2d72;
+  --border:      rgba(0,117,255,0.18);
+  --border2:     rgba(0,117,255,0.32);
 
-  --accent:      #52b788;
-  --accent2:     #2d6a4f;
-  --accent3:     #1a3d28;
-  --accent-bg:   #162b1e;
+  --accent:      #05CD99;
+  --accent2:     #039e76;
+  --accent3:     #022e22;
+  --accent-bg:   #021c18;
 
-  --bad:         #e8856a;
-  --bad-light:   #7a3020;
-  --bad-bg:      #2a1810;
+  --bad:         #FF4D6D;
+  --bad-light:   #7a1830;
+  --bad-bg:      #2a0a14;
 
-  --bonus:       #f0cc6a;
-  --bonus-light: #7a5a10;
-  --bonus-bg:    #2a2010;
+  --bonus:       #FFB830;
+  --bonus-light: #7a5010;
+  --bonus-bg:    #2a1c08;
 
-  --text1: #e8e8e0;
-  --text2: #aaaaaa;
-  --text3: #666666;
-  --text4: #444444;
+  --text1: #FFFFFF;
+  --text2: rgba(255,255,255,0.65);
+  --text3: rgba(255,255,255,0.38);
+  --text4: rgba(255,255,255,0.2);
 
-  --streak-color: #e8a050;
-  --hm-lv4:       #52b788;
+  --streak-color: #FFB830;
+  --hm-lv4:       #05CD99;
+}
+[data-theme="dark"] .hcard.hc-active,
+[data-theme="dark"] .hcard.hc-done {
+  box-shadow: 0 0 10px rgba(5,205,153,0.2);
+}
+[data-theme="dark"] .hm-cell.lv3 {
+  box-shadow: 0 0 4px rgba(5,205,153,0.5);
+}
+[data-theme="dark"] .hm-cell.lv4 {
+  box-shadow: 0 0 6px #05CD99;
 }
 
 /* в•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђв•ђ
