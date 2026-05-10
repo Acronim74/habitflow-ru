@@ -163,6 +163,34 @@
         </div>
       </div>
 
+      <!-- Уведомления -->
+      <div class="burger-section">
+        <div class="burger-section-title">Уведомления</div>
+        <div class="burger-widget-row">
+          <span class="burger-widget-ico" aria-hidden="true">🔔</span>
+          <span class="burger-widget-label">Напоминания</span>
+          <button type="button" class="burger-widget-toggle" id="notificationToggleBurger"
+                  onclick="toggleNotification()"
+                  aria-label="Ежедневное напоминание о привычках">
+            <span class="mood-toggle-knob"></span>
+          </button>
+        </div>
+        <div class="burger-widget-row" id="notificationTimeRow" style="display:none">
+          <span class="burger-widget-ico" aria-hidden="true">⏰</span>
+          <span class="burger-widget-label">Время</span>
+          <input type="time" id="notificationTimeInput" value="21:00"
+                 onchange="setNotificationTime(this.value)"
+                 style="background:var(--surface);border:0.5px solid var(--border2);
+                        border-radius:var(--r-sm);padding:3px 8px;font-size:13px;
+                        color:var(--text1);font-family:inherit;cursor:pointer;
+                        outline:none">
+        </div>
+        <div id="notificationNote"
+             style="font-size:11px;color:var(--text3);padding:0 4px 2px;display:none">
+          Работает пока приложение открыто или в фоне
+        </div>
+      </div>
+
       <!-- Данные -->
       <div class="burger-section">
         <div class="burger-section-title">Данные</div>

@@ -1,4 +1,4 @@
-const CACHE = 'habitflow-v11';
+const CACHE = 'habitflow-v12';
 
 // Динамически определяем базовый путь — работает с любым именем репо
 const BASE = self.location.pathname.replace(/\/sw\.js$/, '');
@@ -79,7 +79,36 @@ self.addEventListener('fetch', e => {
   );
 });
 
-// Обновление по команде
+// Обновление по команде + показ уведомлений
 self.addEventListener('message', e => {
-  if (e.data === 'SKIP_WAITING') self.skipWaiting();
+  if (e.data === 'SKIP_WAITING') {
+    self.skipWaiting();
+    return;
+  }
+  if (e.data?.type === 'SHOW_NOTIFICATION') {
+    e.waitUntil(
+      self.registration.showNotification(e.data.title || 'HabitFlow', {
+        body:     e.data.body || '',
+        icon:     BASE + '/icons/icon-192.png',
+        badge:    BASE + '/icons/icon-192.png',
+        tag:      'habitflow-reminder',
+        renotify: true,
+        data:     { url: self.registration.scope },
+      })
+    );
+  }
+});
+
+// Клик по уведомлению — открываем/фокусируем приложение
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then(list => {
+        for (const c of list) {
+          if (c.url.startsWith(self.registration.scope) && 'focus' in c) return c.focus();
+        }
+        return clients.openWindow(e.notification.data?.url || self.registration.scope);
+      })
+  );
 });

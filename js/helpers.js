@@ -285,6 +285,17 @@ function scheduleLabel(h) {
 
 // ── Конфетти ───────────────────────────────
 
+// ── Бейдж иконки приложения ────────────────
+
+function _updateBadge() {
+  if (!('setAppBadge' in navigator)) return;
+  const tk     = _todayKey();
+  const good   = habits.filter(h => !h.bad && _isWorkDay(h, tk));
+  const undone = good.filter(h => !h.checks?.[tk]).length;
+  if (undone > 0) navigator.setAppBadge(undone).catch(() => {});
+  else            navigator.clearAppBadge().catch(() => {});
+}
+
 /** @param {{ lite?: boolean }} [opts] — lite: меньше частиц и кадров, не конкурирует с длинным CSS-flip */
 function spawnConfetti(opts) {
   const lite = !!(opts && opts.lite);

@@ -9,6 +9,29 @@
   "background_color": "#f2f2ed",
   "theme_color": "#2d6a4f",
   "lang": "ru",
+  "shortcuts": [
+    {
+      "name": "Сегодня",
+      "short_name": "Сегодня",
+      "description": "Список привычек на сегодня",
+      "url": "./?screen=today",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Новая привычка",
+      "short_name": "Добавить",
+      "description": "Создать новую привычку",
+      "url": "./?action=create",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Аналитика",
+      "short_name": "Аналитика",
+      "description": "Открыть экран аналитики",
+      "url": "./?screen=analytics",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
   "icons": [
     {
       "src": "icons/icon-192.png",

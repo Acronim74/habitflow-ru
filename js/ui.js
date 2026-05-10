@@ -128,6 +128,7 @@ function renderAll() {
   _syncDayProgressWidgetToggleUI();
   _syncBestStreakWidgetToggleUI();
   _syncSeriesWidgetToggleUI();
+  _syncNotificationToggleUI();
 }
 
 /** Синхронизирует переключатель дневника настроения: вкладка «Привычки» и меню «Виджеты». */
@@ -174,6 +175,99 @@ function _syncSeriesWidgetToggleUI() {
   const knob = btn.querySelector('.mood-toggle-knob') || btn.firstElementChild;
   if (knob) knob.style.left = on ? '23px' : '3px';
   btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+}
+
+// ── Уведомления ───────────────────────────
+
+let _notifTimer = null;
+
+function _syncNotificationToggleUI() {
+  const on  = notificationEnabled;
+  const btn = document.getElementById('notificationToggleBurger');
+  if (btn) {
+    btn.style.background = on ? 'var(--accent)' : 'var(--border2)';
+    const knob = btn.querySelector('.mood-toggle-knob') || btn.firstElementChild;
+    if (knob) knob.style.left = on ? '23px' : '3px';
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+  const row = document.getElementById('notificationTimeRow');
+  if (row) row.style.display = on ? 'flex' : 'none';
+  const inp = document.getElementById('notificationTimeInput');
+  if (inp) inp.value = notificationTime;
+  const note = document.getElementById('notificationNote');
+  if (note) note.style.display = on ? 'block' : 'none';
+}
+
+async function toggleNotification() {
+  if (!('Notification' in window)) {
+    showToast('Ваш браузер не поддерживает уведомления');
+    return;
+  }
+  if (!notificationEnabled) {
+    const perm = Notification.permission === 'granted'
+      ? 'granted'
+      : await Notification.requestPermission();
+    if (perm !== 'granted') {
+      showToast('Разрешение на уведомления не выдано — проверь настройки браузера');
+      return;
+    }
+    notificationEnabled = true;
+    saveData();
+    _syncNotificationToggleUI();
+    _scheduleNotification();
+    showToast('🔔 Напоминания включены · каждый день в ' + notificationTime);
+  } else {
+    notificationEnabled = false;
+    if (_notifTimer) { clearTimeout(_notifTimer); _notifTimer = null; }
+    saveData();
+    _syncNotificationToggleUI();
+    showToast('Напоминания выключены');
+  }
+}
+
+function setNotificationTime(val) {
+  if (!val) return;
+  notificationTime = val;
+  saveData();
+  if (notificationEnabled) {
+    _scheduleNotification();
+    showToast('⏰ Напоминание перенесено на ' + val);
+  }
+}
+
+function _scheduleNotification() {
+  if (_notifTimer) { clearTimeout(_notifTimer); _notifTimer = null; }
+  if (!notificationEnabled) return;
+  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+
+  const [h, m] = notificationTime.split(':').map(Number);
+  const now    = new Date();
+  const target = new Date(now);
+  target.setHours(h, m, 0, 0);
+  if (target <= now) target.setDate(target.getDate() + 1);
+
+  _notifTimer = setTimeout(() => {
+    _fireNotification();
+    _scheduleNotification(); // перепланировать на следующий день
+  }, target - now);
+}
+
+function _fireNotification() {
+  const tk     = _todayKey();
+  const good   = habits.filter(h => !h.bad && _isWorkDay(h, tk));
+  const undone = good.filter(h => !h.checks?.[tk]).length;
+  const body   = undone > 0
+    ? `Осталось ${undone} привычек · выполнено ${good.length - undone} из ${good.length}`
+    : good.length > 0
+      ? `Отлично! Все привычки выполнены 🎉`
+      : `Пора добавить привычки и начать отслеживать`;
+
+  const sw = navigator.serviceWorker?.controller;
+  if (sw) {
+    sw.postMessage({ type: 'SHOW_NOTIFICATION', title: 'HabitFlow', body });
+  } else if (Notification.permission === 'granted') {
+    new Notification('HabitFlow', { body, icon: 'icons/icon-192.png' });
+  }
 }
 
 // ── Экран Привычки ────────────────────────
@@ -2302,8 +2396,22 @@ document.addEventListener('DOMContentLoaded', () => {
   _syncDayProgressWidgetToggleUI();
   _syncBestStreakWidgetToggleUI();
   _syncSeriesWidgetToggleUI();
+  _syncNotificationToggleUI();
   _syncNetworkStatusUI(false);
 
+  // URL-параметры от app shortcuts
+  const _urlParams = new URLSearchParams(location.search);
+  const _urlScreen = _urlParams.get('screen');
+  const _urlAction = _urlParams.get('action');
+  if (_urlScreen && ['today','habits','analytics','badges'].includes(_urlScreen)) {
+    navigate(_urlScreen);
+  }
+  if (_urlAction === 'create') {
+    navigate('habits');
+    setTimeout(() => openCreate('good'), 150);
+  }
+
+  _scheduleNotification();
   _initIOSInAppBanner();
   _loadBurgerVersion();
 
