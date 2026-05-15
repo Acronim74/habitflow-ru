@@ -211,6 +211,11 @@
       <!-- Прочее -->
       <div class="burger-section">
         <button type="button" class="burger-item"
+                onclick="closeBurger();showNews()">
+          <span class="burger-item-ico">📰</span>
+          <span>Новости</span>
+        </button>
+        <button type="button" class="burger-item"
                 onclick="openOnboarding();closeBurger()">
           <span class="burger-item-ico">🎓</span>
           <span>Знакомство с приложением</span>
@@ -515,6 +520,18 @@
   </div>
 </div>
 
+<div class="overlay" id="changelogOverlay" onclick="closeChangelog(event)">
+  <div class="modal cl-modal" onclick="event.stopPropagation()">
+    <div id="changelogContent"></div>
+  </div>
+</div>
+
+<div class="overlay overlay-bottom" id="newsOverlay" onclick="closeNews(event)">
+  <div class="news-sheet" onclick="event.stopPropagation()">
+    <div id="newsContent"></div>
+  </div>
+</div>
+
 <div class="overlay" id="installHelpOverlay" onclick="closeInstallHelp(event)">
   <div class="modal install-help-modal" onclick="event.stopPropagation()">
     <div class="ih-head">
@@ -546,6 +563,7 @@
 
 <!-- ════════════ СКРИПТЫ ════════════ -->
 <script src="js/data.js"></script>
+<script src="js/news.js"></script>
 <script src="js/habit-descriptions.js"></script>
 <script src="js/goals.js"></script>
 <script src="js/state.js"></script>

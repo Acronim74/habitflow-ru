@@ -1991,6 +1991,90 @@ function closeInstallHelp(e) {
   document.getElementById('installHelpOverlay').classList.remove('open');
 }
 
+// ── Changelog + News ──────────────────────────
+
+function checkNewVersion() {
+  const seen = localStorage.getItem('hf_seen_version') || '';
+  if (seen !== APP_VERSION && CHANGELOG.length > 0) {
+    _buildChangelogContent();
+    document.getElementById('changelogOverlay').classList.add('open');
+  }
+}
+
+function _buildChangelogContent() {
+  const cl = CHANGELOG[0];
+  const items = cl.items_ru.map(i => `<li>${esc(i)}</li>`).join('');
+  document.getElementById('changelogContent').innerHTML =
+    `<div class="cl-head">
+       <div><span class="cl-badge">v${esc(cl.version)}</span><span class="cl-date">${esc(cl.date_ru)}</span></div>
+       <button type="button" class="ih-close" onclick="closeChangelog()" aria-label="Закрыть">✕</button>
+     </div>
+     <h3 class="cl-title">Что нового</h3>
+     <p class="cl-subtitle">${esc(cl.title_ru)}</p>
+     <ul class="cl-items">${items}</ul>
+     <button type="button" class="btn btn-ghost cl-news-btn" onclick="showNews(true)">Все новости →</button>`;
+}
+
+function closeChangelog(e) {
+  if (e && e.target !== document.getElementById('changelogOverlay')) return;
+  localStorage.setItem('hf_seen_version', APP_VERSION);
+  document.getElementById('changelogOverlay').classList.remove('open');
+}
+
+function showNews(fromChangelog) {
+  if (fromChangelog) {
+    localStorage.setItem('hf_seen_version', APP_VERSION);
+    document.getElementById('changelogOverlay').classList.remove('open');
+  }
+  _buildNewsContent();
+  document.getElementById('newsOverlay').classList.add('open');
+}
+
+function closeNews(e) {
+  if (e && e.target !== document.getElementById('newsOverlay')) return;
+  document.getElementById('newsOverlay').classList.remove('open');
+}
+
+function _buildNewsContent() {
+  let newsHtml;
+  if (NEWS.length > 0) {
+    newsHtml = NEWS.map(n =>
+      `<div class="news-card">
+         <div class="news-card-head">
+           <span class="news-tag">${esc(n.tag_ru)}</span>
+           <span class="news-date">${esc(n.date_ru)}</span>
+         </div>
+         <h4 class="news-title">${esc(n.title_ru)}</h4>
+         <p class="news-body">${esc(n.body_ru)}</p>
+       </div>`
+    ).join('');
+  } else {
+    newsHtml = `<div class="news-empty">Скоро здесь появятся новости и советы по привычкам 🌱</div>`;
+  }
+
+  const updatesHtml = CHANGELOG.length > 0
+    ? `<div class="news-updates-title">Обновления</div>` +
+      CHANGELOG.map(cl =>
+        `<div class="news-update">
+           <div class="news-update-head">
+             <span class="cl-badge">v${esc(cl.version)}</span>
+             <span class="news-update-title">${esc(cl.title_ru)}</span>
+             <span class="news-date">${esc(cl.date_ru)}</span>
+           </div>
+           <ul class="cl-items">${cl.items_ru.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+         </div>`
+      ).join('')
+    : '';
+
+  document.getElementById('newsContent').innerHTML =
+    `<div class="news-sheet-head">
+       <span class="news-sheet-title">Новости</span>
+       <button type="button" class="ih-close" onclick="closeNews()" aria-label="Закрыть">✕</button>
+     </div>
+     <div class="news-list">${newsHtml}</div>
+     ${updatesHtml}`;
+}
+
 function loadDemoData() {
   const yesterday = (() => {
     const d = new Date();
@@ -2500,6 +2584,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   navigate('today');
   renderNav();
+  if (!shouldShowOnboarding) setTimeout(checkNewVersion, 600);
   checkBadges();
   _syncMoodToggleUI();
   _syncDayProgressWidgetToggleUI();

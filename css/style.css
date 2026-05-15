@@ -1196,6 +1196,163 @@ html.ios-inapp-banner-visible .app {
 .ih-steps li:last-child { margin-bottom: 0; }
 .ih-install-btn { width: 100%; margin-top: 16px; }
 
+/* ── Новости и Changelog ────────────────────── */
+.overlay-bottom {
+  align-items: flex-end;
+  justify-content: stretch;
+}
+
+/* Changelog modal — компактный, по центру */
+.cl-modal {
+  width: min(400px, 94vw);
+}
+.cl-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.cl-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-bg);
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-right: 8px;
+}
+.cl-date {
+  font-size: 11px;
+  color: var(--text3);
+}
+.cl-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 2px;
+}
+.cl-subtitle {
+  font-size: 13px;
+  color: var(--text2);
+  margin: 0 0 12px;
+}
+.cl-items {
+  margin: 0 0 16px;
+  padding-left: 18px;
+}
+.cl-items li {
+  font-size: 13px;
+  color: var(--text1);
+  line-height: 1.55;
+  margin-bottom: 6px;
+}
+.cl-items li:last-child { margin-bottom: 0; }
+.cl-news-btn {
+  width: 100%;
+  font-size: 13px;
+  color: var(--text2);
+}
+
+/* News sheet — снизу, высокий */
+.news-sheet {
+  width: 100%;
+  max-height: 85vh;
+  background: var(--surface);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  border-top: 0.5px solid var(--border);
+  padding: 20px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+}
+.news-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.news-sheet-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.news-card {
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px;
+}
+.news-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.news-tag {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--accent);
+  background: var(--accent-bg);
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+.news-date {
+  font-size: 11px;
+  color: var(--text3);
+  margin-left: auto;
+}
+.news-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 6px;
+  color: var(--text1);
+}
+.news-body {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.55;
+  margin: 0;
+}
+.news-empty {
+  font-size: 13px;
+  color: var(--text3);
+  text-align: center;
+  padding: 24px 0;
+}
+.news-updates-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+.news-update {
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+.news-update-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.news-update-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text1);
+  flex: 1;
+}
+
 /* РЎРїСЂР°РІРєР°: С‚РѕС‚ Р¶Рµ РІРёР·СѓР°Р», С‡С‚Рѕ РІ РѕС‚РґРµР»СЊРЅРѕРј HTML-С„Р°Р№Р»Рµ РїРѕРјРѕС‰Рё */
 .guide-modal {
   width: min(640px, 94vw);
