@@ -1,7 +1,7 @@
 // ── Навигация ─────────────────────────────
 
 let _obStep = 0;
-const _OB_TOTAL = 9;
+const _OB_TOTAL = 5;
 const _ONBOARDING_DONE_KEY = 'habitflow_onboarding_done';
 let _lastNetworkOnline = null;
 
@@ -23,14 +23,10 @@ window.addEventListener('appinstalled', () => {
 /** Короткие заголовки для строки прогресса (как в макете). */
 const _OB_HEADINGS = [
   'ПРИВЕТСТВИЕ',
-  'ОТМЕТКИ',
-  'ЗАМЕТКИ',
-  'СОЗДАНИЕ ПРИВЫЧКИ',
-  'СЕРИИ И ОЧКИ',
-  'АНАЛИТИКА И ЗНАЧКИ',
-  'МЕНЮ НАСТРОЕК',
-  'УСТАНОВКА ПРИЛОЖЕНИЯ',
-  'ТВОИ ДАННЫЕ',
+  'ЦЕЛИ',
+  'ПРИВЫЧКИ',
+  'УСТАНОВКА',
+  'НАЧАЛО',
 ];
 
 function _updateTopBarMeta() {
@@ -1691,9 +1687,9 @@ function _obFooterRender() {
       <button type="button" class="ob-btn-back"
               onclick="obPrev()">← Назад</button>
       <button type="button" class="ob-btn-demo"
-              onclick="loadDemoData()">Демо-данные</button>
+              onclick="obSkip()">Без цели</button>
       <button type="button" class="ob-btn-next"
-              onclick="obSkip()">Начать!</button>`;
+              onclick="obGoToGoals()">Выбрать цель →</button>`;
   } else {
     footer.innerHTML = `
       <button type="button" class="ob-btn-back"
@@ -1732,7 +1728,16 @@ function obSkip() {
   renderAll();
 }
 
-const _OB_INSTALL_STEP = 6;
+function obGoToGoals() {
+  const el = document.getElementById('onboardingScreen');
+  if (el) el.style.display = 'none';
+  localStorage.setItem(_ONBOARDING_DONE_KEY, '1');
+  saveData();
+  navigate('goals');
+  renderAll();
+}
+
+const _OB_INSTALL_STEP = 3;
 
 function _isPwaStandalone() {
   return window.matchMedia('(display-mode: standalone)').matches
@@ -2128,25 +2133,60 @@ function loadDemoData() {
 function _obSteps() {
   return [
 
+    // ── Шаг 1: Приветствие ──
     `<div class="ob-ico">🌿</div>
      <div class="ob-title">Добро пожаловать в HabitFlow</div>
      <div class="ob-text">Трекер привычек который работает полностью офлайн.
-       Твои данные хранятся только на этом устройстве — никаких серверов и подписок.</div>
+       Данные хранятся только на твоём устройстве — никаких серверов и подписок.</div>
      <div class="ob-hint">
        <div class="ob-hint-ico">💡</div>
-       <div class="ob-hint-text">За минуту покажем как всё устроено.
-         Или сразу начни — всё интуитивно.</div>
+       <div class="ob-hint-text">За 4 шага покажем главное. Или сразу начни — всё интуитивно.</div>
      </div>`,
 
+    // ── Шаг 2: Цели ──
+    `<div class="ob-ico">🎯</div>
+     <div class="ob-title">Выбери цель — получи план</div>
+     <div class="ob-text">Три готовых 63-дневных трека. Каждый делится на 3 этапа по 21 дню —
+       привычки добавляются автоматически, одна ступень за другой.</div>
+     <div class="ob-goals-preview">
+       <div class="ob-goal-item">
+         <span class="ob-goal-ico">⚡</span>
+         <div>
+           <div class="ob-goal-name">Больше энергии</div>
+           <div class="ob-goal-stages">Фундамент · Активация · Оптимизация</div>
+         </div>
+       </div>
+       <div class="ob-goal-item">
+         <span class="ob-goal-ico">💰</span>
+         <div>
+           <div class="ob-goal-name">Трать умнее</div>
+           <div class="ob-goal-stages">Осознанность · Контроль · Рост</div>
+         </div>
+       </div>
+       <div class="ob-goal-item">
+         <span class="ob-goal-ico">🧘</span>
+         <div>
+           <div class="ob-goal-name">Стать спокойнее</div>
+           <div class="ob-goal-stages">Заземление · Регуляция · Устойчивость</div>
+         </div>
+       </div>
+     </div>
+     <div class="ob-hint">
+       <div class="ob-hint-ico">💡</div>
+       <div class="ob-hint-text">Выбрал цель — твои привычки уходят в архив,
+         привычки цели занимают их место. Вернуть можно в любой момент.</div>
+     </div>`,
+
+    // ── Шаг 3: Отмечай привычки ──
     `<div class="ob-ico">✅</div>
      <div class="ob-title">Отмечай привычки</div>
-     <div class="ob-text">Нажми кнопку справа — карточка перевернётся и
-       покажет время выполнения. Нажми «отменить» чтобы снять отметку.</div>
+     <div class="ob-text">Нажми кнопку справа — карточка перевернётся и покажет
+       время выполнения. Нажми «отменить» чтобы снять отметку.</div>
      <div class="ob-preview">
        <div class="ob-card-front">
          <div class="ob-card-row">
            <div class="ob-card-body">
-             <div class="ob-card-name">🏃 Утренняя пробежка</div>
+             <div class="ob-card-name">💧 Стакан воды с утра</div>
              <div class="ob-card-sub">Начни серию сегодня</div>
            </div>
            <div class="ob-card-check">
@@ -2166,171 +2206,15 @@ function _obSteps() {
      </div>
      <div class="ob-hint">
        <div class="ob-hint-ico">💡</div>
-       <div class="ob-hint-text">Для вредных привычек — две кнопки:
-         ✓ Выдержал или ✕ Был срыв.</div>
+       <div class="ob-hint-text">Серии приносят очки и открывают значки.
+         Чем длиннее серия — тем больше множитель.</div>
      </div>`,
 
-    `<div class="ob-ico">💬</div>
-     <div class="ob-title">Заметки к привычкам</div>
-     <div class="ob-text">После выполнения привычки появляется кнопка 💬 — нажми чтобы записать короткий комментарий о том как всё прошло.</div>
-     <div class="ob-preview" style="flex-direction:column;align-items:stretch;gap:8px">
-       <div class="ob-card-back" style="border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px">
-         <div class="ob-card-back-ico">✓</div>
-         <div style="flex:1">
-           <div class="ob-card-back-title">Выполнено!</div>
-           <div class="ob-card-back-time">07:24</div>
-         </div>
-         <div style="display:flex;flex-direction:column;gap:5px;align-items:center">
-           <div style="font-size:14px;border:0.5px solid rgba(255,255,255,.3);border-radius:6px;padding:2px 7px;cursor:pointer">💬</div>
-           <div class="ob-card-back-undo">отменить</div>
-         </div>
-       </div>
-       <div class="ob-card-back" style="border-radius:10px;padding:10px 14px;background:var(--surface)">
-         <div style="font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px">
-           💬 2 заметки <span style="margin-left:auto">▾</span>
-         </div>
-         <div style="margin-top:6px;font-size:11px;color:var(--text2)">
-           <div style="padding:3px 0;border-bottom:0.5px solid var(--border)">3 мая · Встал легко, не стал откладывать</div>
-           <div style="padding:3px 0">2 мая · Дождь, пробежал по парку</div>
-         </div>
-       </div>
-     </div>
-     <div class="ob-hint">
-       <div class="ob-hint-ico">💡</div>
-       <div class="ob-hint-text">Накопленные заметки видны под карточкой —
-         разворачиваются по клику. Помогают замечать закономерности.</div>
-     </div>`,
-
-    `<div class="ob-ico-plus" aria-hidden="true">+</div>
-     <div class="ob-title">Как создать привычку</div>
-     <div class="ob-text">Нажми «Добавить привычку» — откроется форма. Вот что в ней есть:</div>
-     <div class="ob-preview ob-preview-create">
-       <div class="ob-preview-label">Тип привычки</div>
-       <div class="ob-type-row">
-         <div class="ob-type-btn good">
-           <span class="ob-type-glyph" aria-hidden="true">✓</span>
-           Полезная
-         </div>
-         <div class="ob-type-btn bad">
-           <span class="ob-type-glyph" aria-hidden="true">🚫</span>
-           Вредная
-         </div>
-       </div>
-       <div class="ob-preview-label">Иконка</div>
-       <div class="ob-icon-row">
-         <div class="ob-icon-btn sel">🏃</div>
-         <div class="ob-icon-btn">📚</div>
-         <div class="ob-icon-btn">🧘</div>
-         <div class="ob-icon-btn">💪</div>
-         <div class="ob-icon-btn">💧</div>
-         <div class="ob-icon-btn">😴</div>
-         <div class="ob-icon-btn">🚫</div>
-         <div class="ob-icon-btn">🚬</div>
-       </div>
-       <div class="ob-preview-label">Название</div>
-       <div class="ob-field ob-field-placeholder">Утренняя пробежка</div>
-       <div class="ob-preview-label">Расписание</div>
-       <div class="ob-sched-row">
-         <div class="ob-sched-btn sel">Каждый день</div>
-         <div class="ob-sched-btn">Будни</div>
-         <div class="ob-sched-btn">Выходные</div>
-         <div class="ob-sched-btn">Свои дни</div>
-       </div>
-     </div>
-     <div class="ob-hint">
-       <div class="ob-hint-ico">💡</div>
-       <div class="ob-hint-text">Расписание влияет на прогресс дня. Привычка «Будни»
-         не считается пропуском в выходной — но её можно отметить как бонус.</div>
-     </div>
-     <div class="ob-hint">
-       <div class="ob-hint-ico">💡</div>
-       <div class="ob-hint-text">Для вредных привычек расписание недоступно — они
-         отслеживаются каждый день.</div>
-     </div>`,
-
-    `<div class="ob-ico">🔥</div>
-     <div class="ob-title">Серии и очки</div>
-     <div class="ob-text">Каждая отметка приносит очки.
-       Чем дольше серия — тем больше множитель.</div>
-     <div class="ob-pts-row">
-       <span class="ob-pts-pill good">Полезная +10 pts</span>
-       <span class="ob-pts-pill bad">Вредная +5 pts</span>
-       <span class="ob-pts-pill bonus">Бонус +10 pts</span>
-     </div>
-     <div class="ob-mult-card">
-       7+ дней подряд → <strong style="color:var(--accent)">×2</strong><br>
-       30+ дней подряд → <strong style="color:var(--accent)">×3</strong><br>
-       100+ дней подряд → <strong style="color:var(--accent)">×5</strong>
-     </div>
-     <div class="ob-hint" style="margin-top:10px">
-       <div class="ob-hint-ico">💡</div>
-       <div class="ob-hint-text">Закрыл все запланированные привычки за день —
-         дополнительно +25 pts.</div>
-     </div>`,
-
-    `<div class="ob-ico">📊</div>
-     <div class="ob-title">Аналитика и значки</div>
-     <div class="ob-text">В аналитике — тепловые карты за неделю, месяц,
-       квартал или год. В значках — твой персонаж растёт по мере
-       накопления очков.</div>
-     <div class="ob-badge-row">
-       <div class="ob-badge-item">
-         <div class="ob-badge-ico">🔥</div>
-         <div class="ob-badge-lbl">Первый огонь</div>
-       </div>
-       <div class="ob-badge-item">
-         <div class="ob-badge-ico">💎</div>
-         <div class="ob-badge-lbl">Бриллиант</div>
-       </div>
-       <div class="ob-badge-item">
-         <div class="ob-badge-ico locked">🏆</div>
-         <div class="ob-badge-lbl">Чемпион</div>
-       </div>
-       <div class="ob-badge-item">
-         <div class="ob-badge-ico locked">⚡</div>
-         <div class="ob-badge-lbl">Центурион</div>
-       </div>
-       <div class="ob-badge-item">
-         <div class="ob-badge-ico locked">🍀</div>
-         <div class="ob-badge-lbl">Удача</div>
-       </div>
-     </div>
-     <div class="ob-hint">
-       <div class="ob-hint-ico">💡</div>
-       <div class="ob-hint-text">Стадии: Начало → В ритме → Устойчивость →
-         Сила привычки → Опора → Мастер</div>
-     </div>`,
-
-    // ── Шаг 6: Меню настроек ──
-    `<div class="ob-ico">☰</div>
-     <div class="ob-title">Меню настроек</div>
-     <div class="ob-text">Нажми кнопку ☰ в правом верхнем углу —
-       откроется меню с настройками приложения.</div>
-     <div class="ob-data-row">
-       <div class="ob-data-ico">🎨</div>
-       <div class="ob-data-text">Тема — четыре варианта оформления:
-         светлая, тёмная, Лес и Veloce</div>
-     </div>
-     <div class="ob-data-row">
-       <div class="ob-data-ico">📊</div>
-       <div class="ob-data-text">Виджеты — включай и выключай карточки
-         прогресса, Личного рекорда и настроения</div>
-     </div>
-     <div class="ob-data-row">
-       <div class="ob-data-ico">💾</div>
-       <div class="ob-data-text">Данные — экспорт и импорт резервных копий</div>
-     </div>
-     <div class="ob-data-row">
-       <div class="ob-data-ico">🎓</div>
-       <div class="ob-data-text">Знакомство — повторно открыть этот тур
-         в любой момент</div>
-     </div>`,
-
-    // ── Шаг 7: Установка на телефон или ПК ──
+    // ── Шаг 4: Установка ──
     `<div class="ob-ico">📲</div>
      <div class="ob-title">Установи как приложение</div>
-     <div class="ob-text">HabitFlow можно установить на телефон или компьютер —
-       будет работать как обычное приложение без браузерной строки.</div>
+     <div class="ob-text">HabitFlow работает как PWA — установи на телефон или ПК.
+       Никакого магазина приложений, работает офлайн.</div>
      <div class="ob-install-block">
        <button type="button" class="ob-btn-install" id="obPwaInstallBtn"
                onclick="pwaTryInstall()">Установить приложение</button>
@@ -2338,46 +2222,40 @@ function _obSteps() {
      </div>
      <div class="ob-data-row">
        <div class="ob-data-ico">🤖</div>
-       <div class="ob-data-text"><b>Android:</b> открой в Chrome →
-         меню ⋮ → «Добавить на главный экран»</div>
+       <div class="ob-data-text"><b>Android:</b> Chrome → меню ⋮ → «Добавить на главный экран»</div>
      </div>
      <div class="ob-data-row">
        <div class="ob-data-ico">🍎</div>
-       <div class="ob-data-text"><b>iPhone:</b> открой в Safari →
-         кнопка «Поделиться» → «На экран Домой»</div>
+       <div class="ob-data-text"><b>iPhone:</b> Safari → кнопка «Поделиться» → «На экран Домой»</div>
      </div>
      <div class="ob-data-row">
        <div class="ob-data-ico">💻</div>
-       <div class="ob-data-text"><b>ПК (Chrome/Edge):</b> нажми иконку
-         установки в адресной строке справа →
-         «Установить»</div>
-     </div>
-     <div class="ob-hint" style="margin-top:8px">
-       <div class="ob-hint-ico">💡</div>
-       <div class="ob-hint-text">После установки приложение работает
-         полностью офлайн — данные хранятся на устройстве.</div>
+       <div class="ob-data-text"><b>ПК:</b> Chrome/Edge → иконка установки в адресной строке</div>
      </div>`,
 
-    `<div class="ob-ico">💾</div>
-     <div class="ob-title">Твои данные в безопасности</div>
-     <div class="ob-text">Всё хранится локально на этом устройстве.
-       Делай резервные копии через кнопки в навбаре.</div>
-     <div class="ob-data-row">
-       <div class="ob-data-ico">💾</div>
-       <div class="ob-data-text">Экспорт — скачать резервную копию (.json)</div>
+    // ── Шаг 5: Готово ──
+    `<div class="ob-ico">🚀</div>
+     <div class="ob-title">Готово — начнём?</div>
+     <div class="ob-text">Выбери цель — первые три привычки появятся автоматически.
+       Каждые 21 день будет разблокироваться следующий этап.</div>
+     <div class="ob-goals-final">
+       <div class="ob-final-row">
+         <span class="ob-final-num">21</span>
+         <span class="ob-final-label">дней — первый этап</span>
+       </div>
+       <div class="ob-final-row">
+         <span class="ob-final-num">3</span>
+         <span class="ob-final-label">привычки за раз — не перегружает</span>
+       </div>
+       <div class="ob-final-row">
+         <span class="ob-final-num">63</span>
+         <span class="ob-final-label">дня до результата</span>
+       </div>
      </div>
-     <div class="ob-data-row">
-       <div class="ob-data-ico">📂</div>
-       <div class="ob-data-text">Импорт — восстановить из файла</div>
-     </div>
-     <div class="ob-data-row">
-       <div class="ob-data-ico">❓</div>
-       <div class="ob-data-text">Помощь — полная документация</div>
-     </div>
-     <div class="ob-hint" style="margin-top:4px">
+     <div class="ob-hint">
        <div class="ob-hint-ico">💡</div>
-       <div class="ob-hint-text">Попробуй демо-данные чтобы увидеть приложение
-         в действии — их можно удалить в любой момент.</div>
+       <div class="ob-hint-text">Хочешь начать без цели? Добавь свои привычки
+         через «+» на экране Привычки.</div>
      </div>`,
   ];
 }
