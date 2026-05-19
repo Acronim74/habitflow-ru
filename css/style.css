@@ -3501,3 +3501,613 @@ html.ios-inapp-banner-visible .ob-overlay {
 }
 
 
+/* ════════════════════════════════════════════════════════
+   DECO NOIR — Art Deco тёмная
+   ════════════════════════════════════════════════════════ */
+
+[data-theme="deco-noir"] {
+  --bg:          #0D0D0D;
+  --surface:     #141210;
+  --border:      rgba(200,165,80,0.22);
+  --border2:     rgba(200,165,80,0.42);
+
+  --accent:      #C8A550;
+  --accent2:     #E8C870;
+  --accent3:     rgba(200,165,80,0.12);
+  --accent-bg:   rgba(200,165,80,0.07);
+
+  --bad:         #C8503A;
+  --bad-light:   rgba(200,80,58,0.30);
+  --bad-bg:      rgba(200,80,58,0.10);
+
+  --bonus:       #E8C870;
+  --bonus-light: rgba(232,200,112,0.30);
+  --bonus-bg:    rgba(232,200,112,0.10);
+
+  --text1: #F5ECD8;
+  --text2: rgba(245,236,216,0.68);
+  --text3: rgba(245,236,216,0.38);
+  --text4: rgba(245,236,216,0.16);
+
+  --streak-color: #E8C870;
+  --hm-lv4:       #E8C870;
+
+  /* Острые углы — Art Deco не терпит скруглений */
+  --r-sm: 2px;
+  --r-md: 2px;
+  --r-lg: 2px;
+}
+
+/* ── Фон с тонким паттерном из ромбов ─────────────────── */
+[data-theme="deco-noir"] body {
+  background-color: #0D0D0D;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpolygon points='16,11 21,16 16,21 11,16' fill='none' stroke='rgba(200%2C165%2C80%2C0.09)' stroke-width='0.75'/%3E%3C/svg%3E");
+  background-size: 32px 32px;
+}
+
+/* ── Топ-навбар ────────────────────────────────────────── */
+[data-theme="deco-noir"] .topnav {
+  background: #0A0A0A;
+  border-bottom: 1px solid rgba(200,165,80,0.28);
+}
+
+/* ── Логотип: засечный шрифт + золотые буквы ──────────── */
+[data-theme="deco-noir"] .nav-brand-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #C8A550;
+}
+[data-theme="deco-noir"] .nav-brand-icon {
+  background: transparent;
+  border: 1px solid rgba(200,165,80,0.45);
+  border-radius: 2px;
+  font-size: 13px;
+}
+
+/* ── Вкладки десктопной навигации ─────────────────────── */
+[data-theme="deco-noir"] .nav-tab {
+  border-radius: 2px;
+  letter-spacing: 0.03em;
+}
+[data-theme="deco-noir"] .nav-tab.active {
+  background: rgba(200,165,80,0.14);
+  color: #C8A550;
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 #C8A550;
+}
+[data-theme="deco-noir"] .nav-tab:hover {
+  background: rgba(200,165,80,0.07);
+  color: var(--text2);
+}
+
+/* ── Нижняя навигация (мобайл) ────────────────────────── */
+[data-theme="deco-noir"] .bottom-nav {
+  background: #0A0A0A;
+  border-top: 1px solid rgba(200,165,80,0.25);
+}
+[data-theme="deco-noir"] .bottom-nav-item.active {
+  color: #C8A550;
+}
+[data-theme="deco-noir"] .bottom-nav-item.active .bottom-nav-lbl {
+  font-family: 'Playfair Display', Georgia, serif;
+  letter-spacing: 0.04em;
+}
+
+/* ── Карточки привычек — золотая рамка + угловые акценты ─ */
+[data-theme="deco-noir"] .hcard,
+[data-theme="deco-noir"] .bcard {
+  background: #141210;
+  border: 1px solid rgba(200,165,80,0.22);
+  border-radius: 2px;
+  box-shadow: inset 0 0 40px rgba(200,165,80,0.02);
+}
+
+/* Угловые декоративные L-элементы */
+[data-theme="deco-noir"] .hcard::before,
+[data-theme="deco-noir"] .bcard::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid rgba(200,165,80,0.55);
+  border-left: 1px solid rgba(200,165,80,0.55);
+  pointer-events: none;
+  z-index: 1;
+}
+[data-theme="deco-noir"] .hcard::after,
+[data-theme="deco-noir"] .bcard::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 1px solid rgba(200,165,80,0.55);
+  border-right: 1px solid rgba(200,165,80,0.55);
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-theme="deco-noir"] .hcard.hc-active {
+  border-color: rgba(200,165,80,0.55);
+  box-shadow: 0 0 16px rgba(200,165,80,0.10);
+}
+[data-theme="deco-noir"] .hcard.hc-done {
+  opacity: 0.55;
+  border-color: rgba(200,165,80,0.18);
+}
+[data-theme="deco-noir"] .hcard.hc-bonus {
+  border-color: rgba(232,200,112,0.40);
+}
+[data-theme="deco-noir"] .bcard.bc-clean {
+  border-color: rgba(200,165,80,0.50);
+  box-shadow: 0 0 14px rgba(200,165,80,0.10);
+}
+[data-theme="deco-noir"] .bcard.bc-slipped {
+  border-color: rgba(200,80,58,0.50);
+}
+
+/* ── Прогресс-полоса карточки ─────────────────────────── */
+[data-theme="deco-noir"] .hcard-bar-track {
+  background: rgba(200,165,80,0.10);
+}
+[data-theme="deco-noir"] .hcard-bar {
+  background: linear-gradient(90deg, #C8A550, #E8C870);
+  box-shadow: 0 0 6px rgba(200,165,80,0.35);
+}
+[data-theme="deco-noir"] .hcard.hc-done .hcard-bar {
+  background: linear-gradient(90deg, #C8A550, #E8C870);
+}
+
+/* ── Разделитель — тонкая золотая линия ───────────────── */
+[data-theme="deco-noir"] .divider {
+  background: linear-gradient(90deg, transparent, rgba(200,165,80,0.35), transparent);
+  height: 1px;
+}
+
+/* ── Кнопки ───────────────────────────────────────────── */
+[data-theme="deco-noir"] .btn-primary {
+  background: linear-gradient(135deg, #B8942A, #E8C870);
+  color: #0D0D0D;
+  border: none;
+  border-radius: 2px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 16px rgba(200,165,80,0.22);
+  font-size: 12px;
+}
+[data-theme="deco-noir"] .btn-primary:hover {
+  opacity: 1;
+  box-shadow: 0 4px 24px rgba(200,165,80,0.35);
+}
+[data-theme="deco-noir"] .btn-add {
+  background: linear-gradient(135deg, #B8942A, #E8C870);
+  color: #0D0D0D;
+  border: none;
+  border-radius: 2px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 16px rgba(200,165,80,0.22);
+  font-size: 12px;
+}
+[data-theme="deco-noir"] .btn-ghost {
+  border-color: rgba(200,165,80,0.28);
+  color: rgba(245,236,216,0.55);
+  border-radius: 2px;
+}
+[data-theme="deco-noir"] .btn-ghost:hover {
+  background: rgba(200,165,80,0.07);
+}
+
+/* ── Тепловая карта — ромбовидные ячейки ─────────────── */
+[data-theme="deco-noir"] .hm-cell {
+  transform: rotate(45deg) scale(0.68);
+  border-radius: 1px;
+  background: rgba(200,165,80,0.08);
+  opacity: 1;
+}
+[data-theme="deco-noir"] .hm-cell.lv1 { background: rgba(200,165,80,0.22); }
+[data-theme="deco-noir"] .hm-cell.lv2 { background: rgba(200,165,80,0.45); }
+[data-theme="deco-noir"] .hm-cell.lv3 {
+  background: #C8A550;
+  box-shadow: 0 0 6px rgba(200,165,80,0.5);
+}
+[data-theme="deco-noir"] .hm-cell.lv4 {
+  background: #E8C870;
+  box-shadow: 0 0 10px rgba(232,200,112,0.7);
+}
+[data-theme="deco-noir"] .hm-cell.today {
+  outline: 1.5px solid rgba(200,165,80,0.8);
+  outline-offset: 2px;
+}
+
+/* ── Бургер-меню ──────────────────────────────────────── */
+[data-theme="deco-noir"] .burger-drawer {
+  background: #0E0C09;
+  border-left: 1px solid rgba(200,165,80,0.20);
+}
+[data-theme="deco-noir"] .burger-section-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 10px;
+  color: rgba(200,165,80,0.60);
+}
+[data-theme="deco-noir"] .burger-overlay {
+  background: rgba(0,0,0,0.75);
+}
+
+/* ── Оверлеи и модалки ────────────────────────────────── */
+[data-theme="deco-noir"] .overlay {
+  background: rgba(0,0,0,0.80);
+}
+[data-theme="deco-noir"] .modal,
+[data-theme="deco-noir"] .sheet,
+[data-theme="deco-noir"] .news-sheet,
+[data-theme="deco-noir"] .cl-modal {
+  background: #141210;
+  border: 1px solid rgba(200,165,80,0.22);
+  border-radius: 2px;
+}
+
+/* ── Форма добавления привычки ────────────────────────── */
+[data-theme="deco-noir"] .form-input,
+[data-theme="deco-noir"] select,
+[data-theme="deco-noir"] input[type="text"],
+[data-theme="deco-noir"] input[type="time"] {
+  background: #0D0D0D;
+  border-color: rgba(200,165,80,0.25);
+  border-radius: 2px;
+  color: #F5ECD8;
+}
+[data-theme="deco-noir"] .form-input:focus,
+[data-theme="deco-noir"] select:focus,
+[data-theme="deco-noir"] input:focus {
+  border-color: rgba(200,165,80,0.60);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(200,165,80,0.10);
+}
+
+/* ── Виджеты дашборда ─────────────────────────────────── */
+[data-theme="deco-noir"] .widget {
+  background: #141210;
+  border: 1px solid rgba(200,165,80,0.18);
+  border-radius: 2px;
+  position: relative;
+}
+/* Угловые декоры на виджетах */
+[data-theme="deco-noir"] .widget::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 10px;
+  height: 10px;
+  border-top: 1px solid rgba(200,165,80,0.40);
+  border-left: 1px solid rgba(200,165,80,0.40);
+  pointer-events: none;
+}
+[data-theme="deco-noir"] .widget::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 10px;
+  height: 10px;
+  border-bottom: 1px solid rgba(200,165,80,0.40);
+  border-right: 1px solid rgba(200,165,80,0.40);
+  pointer-events: none;
+}
+
+/* ── Значки ───────────────────────────────────────────── */
+[data-theme="deco-noir"] .badge-card {
+  background: #141210;
+  border: 1px solid rgba(200,165,80,0.20);
+  border-radius: 2px;
+}
+[data-theme="deco-noir"] .badge-card.unlocked {
+  border-color: rgba(200,165,80,0.50);
+  box-shadow: 0 0 18px rgba(200,165,80,0.15);
+}
+
+/* ── Цвет кнопки выбора темы ──────────────────────────── */
+.burger-theme-grid .theme-btn[data-theme="deco-noir"] { color: #C8A550; }
+
+
+/* ════════════════════════════════════════════════════════
+   IVORY — Art Deco светлая
+   ════════════════════════════════════════════════════════ */
+
+[data-theme="ivory"] {
+  --bg:          #F5F0E8;
+  --surface:     #FFFDF7;
+  --border:      rgba(160,120,50,0.20);
+  --border2:     rgba(160,120,50,0.38);
+
+  --accent:      #9A6828;
+  --accent2:     #C8A550;
+  --accent3:     rgba(154,104,40,0.12);
+  --accent-bg:   rgba(154,104,40,0.06);
+
+  --bad:         #9A2818;
+  --bad-light:   rgba(154,40,24,0.20);
+  --bad-bg:      rgba(154,40,24,0.06);
+
+  --bonus:       #9A6828;
+  --bonus-light: rgba(154,104,40,0.20);
+  --bonus-bg:    rgba(154,104,40,0.06);
+
+  --text1: #1C1208;
+  --text2: #5C4020;
+  --text3: rgba(28,18,8,0.45);
+  --text4: rgba(28,18,8,0.20);
+
+  --streak-color: #9A6828;
+  --hm-lv4:       #7A5018;
+
+  --r-sm: 2px;
+  --r-md: 2px;
+  --r-lg: 2px;
+}
+
+[data-theme="ivory"] body {
+  background-color: #F5F0E8;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpolygon points='16,11 21,16 16,21 11,16' fill='none' stroke='rgba(154%2C104%2C40%2C0.12)' stroke-width='0.75'/%3E%3C/svg%3E");
+  background-size: 32px 32px;
+}
+
+[data-theme="ivory"] .topnav {
+  background: #FFFDF7;
+  border-bottom: 1px solid rgba(154,104,40,0.22);
+  box-shadow: 0 1px 8px rgba(154,104,40,0.06);
+}
+
+[data-theme="ivory"] .nav-brand-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #9A6828;
+}
+[data-theme="ivory"] .nav-brand-icon {
+  background: transparent;
+  border: 1px solid rgba(154,104,40,0.40);
+  border-radius: 2px;
+  font-size: 13px;
+}
+
+[data-theme="ivory"] .nav-tab {
+  border-radius: 2px;
+  letter-spacing: 0.03em;
+}
+[data-theme="ivory"] .nav-tab.active {
+  background: rgba(154,104,40,0.10);
+  color: #9A6828;
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 #9A6828;
+}
+[data-theme="ivory"] .nav-tab:hover {
+  background: rgba(154,104,40,0.06);
+  color: var(--text2);
+}
+
+[data-theme="ivory"] .bottom-nav {
+  background: #FFFDF7;
+  border-top: 1px solid rgba(154,104,40,0.20);
+  box-shadow: 0 -1px 8px rgba(154,104,40,0.06);
+}
+[data-theme="ivory"] .bottom-nav-item.active {
+  color: #9A6828;
+}
+[data-theme="ivory"] .bottom-nav-item.active .bottom-nav-lbl {
+  font-family: 'Playfair Display', Georgia, serif;
+  letter-spacing: 0.04em;
+}
+
+[data-theme="ivory"] .hcard,
+[data-theme="ivory"] .bcard {
+  background: #FFFDF7;
+  border: 1px solid rgba(154,104,40,0.18);
+  border-radius: 2px;
+  box-shadow: 0 1px 6px rgba(154,104,40,0.05);
+}
+
+[data-theme="ivory"] .hcard::before,
+[data-theme="ivory"] .bcard::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid rgba(154,104,40,0.45);
+  border-left: 1px solid rgba(154,104,40,0.45);
+  pointer-events: none;
+  z-index: 1;
+}
+[data-theme="ivory"] .hcard::after,
+[data-theme="ivory"] .bcard::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 1px solid rgba(154,104,40,0.45);
+  border-right: 1px solid rgba(154,104,40,0.45);
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-theme="ivory"] .hcard.hc-active {
+  border-color: rgba(154,104,40,0.45);
+  box-shadow: 0 0 14px rgba(154,104,40,0.08);
+}
+[data-theme="ivory"] .hcard.hc-done {
+  opacity: 0.58;
+  border-color: rgba(154,104,40,0.15);
+}
+[data-theme="ivory"] .bcard.bc-clean {
+  border-color: rgba(154,104,40,0.45);
+  box-shadow: 0 0 12px rgba(154,104,40,0.08);
+}
+
+[data-theme="ivory"] .hcard-bar-track {
+  background: rgba(154,104,40,0.10);
+}
+[data-theme="ivory"] .hcard-bar {
+  background: linear-gradient(90deg, #9A6828, #C8A550);
+}
+[data-theme="ivory"] .hcard.hc-done .hcard-bar {
+  background: linear-gradient(90deg, #9A6828, #C8A550);
+}
+
+[data-theme="ivory"] .divider {
+  background: linear-gradient(90deg, transparent, rgba(154,104,40,0.28), transparent);
+  height: 1px;
+}
+
+[data-theme="ivory"] .btn-primary {
+  background: linear-gradient(135deg, #9A6828, #C8A550);
+  color: #FFFDF7;
+  border: none;
+  border-radius: 2px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 12px rgba(154,104,40,0.20);
+  font-size: 12px;
+}
+[data-theme="ivory"] .btn-add {
+  background: linear-gradient(135deg, #9A6828, #C8A550);
+  color: #FFFDF7;
+  border: none;
+  border-radius: 2px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 12px rgba(154,104,40,0.20);
+  font-size: 12px;
+}
+[data-theme="ivory"] .btn-ghost {
+  border-color: rgba(154,104,40,0.25);
+  color: rgba(28,18,8,0.50);
+  border-radius: 2px;
+}
+[data-theme="ivory"] .btn-ghost:hover {
+  background: rgba(154,104,40,0.06);
+}
+
+[data-theme="ivory"] .hm-cell {
+  transform: rotate(45deg) scale(0.68);
+  border-radius: 1px;
+  background: rgba(154,104,40,0.10);
+  opacity: 1;
+}
+[data-theme="ivory"] .hm-cell.lv1 { background: rgba(154,104,40,0.22); }
+[data-theme="ivory"] .hm-cell.lv2 { background: rgba(154,104,40,0.45); }
+[data-theme="ivory"] .hm-cell.lv3 {
+  background: #9A6828;
+  box-shadow: 0 0 5px rgba(154,104,40,0.4);
+}
+[data-theme="ivory"] .hm-cell.lv4 {
+  background: #7A5018;
+  box-shadow: 0 0 7px rgba(122,80,24,0.5);
+}
+[data-theme="ivory"] .hm-cell.today {
+  outline: 1.5px solid rgba(154,104,40,0.7);
+  outline-offset: 2px;
+}
+
+[data-theme="ivory"] .burger-drawer {
+  background: #FFFDF7;
+  border-left: 1px solid rgba(154,104,40,0.18);
+}
+[data-theme="ivory"] .burger-section-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 10px;
+  color: rgba(154,104,40,0.55);
+}
+
+[data-theme="ivory"] .widget {
+  background: #FFFDF7;
+  border: 1px solid rgba(154,104,40,0.15);
+  border-radius: 2px;
+  position: relative;
+  box-shadow: 0 1px 6px rgba(154,104,40,0.04);
+}
+[data-theme="ivory"] .widget::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 10px;
+  height: 10px;
+  border-top: 1px solid rgba(154,104,40,0.35);
+  border-left: 1px solid rgba(154,104,40,0.35);
+  pointer-events: none;
+}
+[data-theme="ivory"] .widget::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 10px;
+  height: 10px;
+  border-bottom: 1px solid rgba(154,104,40,0.35);
+  border-right: 1px solid rgba(154,104,40,0.35);
+  pointer-events: none;
+}
+
+[data-theme="ivory"] .badge-card {
+  background: #FFFDF7;
+  border: 1px solid rgba(154,104,40,0.18);
+  border-radius: 2px;
+}
+[data-theme="ivory"] .badge-card.unlocked {
+  border-color: rgba(154,104,40,0.45);
+  box-shadow: 0 0 14px rgba(154,104,40,0.10);
+}
+
+[data-theme="ivory"] .overlay {
+  background: rgba(28,18,8,0.65);
+}
+[data-theme="ivory"] .modal,
+[data-theme="ivory"] .sheet,
+[data-theme="ivory"] .news-sheet,
+[data-theme="ivory"] .cl-modal {
+  background: #FFFDF7;
+  border: 1px solid rgba(154,104,40,0.20);
+  border-radius: 2px;
+}
+
+[data-theme="ivory"] .form-input,
+[data-theme="ivory"] select,
+[data-theme="ivory"] input[type="text"],
+[data-theme="ivory"] input[type="time"] {
+  background: #F5F0E8;
+  border-color: rgba(154,104,40,0.22);
+  border-radius: 2px;
+  color: #1C1208;
+}
+[data-theme="ivory"] .form-input:focus,
+[data-theme="ivory"] select:focus,
+[data-theme="ivory"] input:focus {
+  border-color: rgba(154,104,40,0.55);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(154,104,40,0.08);
+}
+
+/* ── Цвет кнопки выбора темы ──────────────────────────── */
+.burger-theme-grid .theme-btn[data-theme="ivory"]     { color: #9A6828; }
+

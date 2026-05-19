@@ -2410,7 +2410,8 @@ const GUIDE_MODAL_HTML = `
 
   <div class="card">
     <p>Переключатель тем в бургер-меню ☰.
-    Четыре темы: ☀️ Светлая, 🌙 Тёмная, 🌿 Лес, ◈ Veloce.</p>
+    Шесть тем: ☀️ Светлая, 🌙 Тёмная, 🌿 Лес, ◈ Veloce,
+    🎭 Deco Noir, 🏛️ Ivory.</p>
   </div>
 
   <p class="footer">HabitFlow · работает полностью офлайн</p>
@@ -2468,7 +2469,7 @@ function closeBurger() {
 // ── Инициализация ─────────────────────────
 
 function setTheme(theme, save = true) {
-  const allowed = new Set(['light', 'dark', 'forest', 'veloce']);
+  const allowed = new Set(['light', 'dark', 'forest', 'veloce', 'deco-noir', 'ivory']);
   const t = allowed.has(theme) ? theme : 'light';
   document.documentElement.setAttribute('data-theme', t);
 
