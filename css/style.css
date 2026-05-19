@@ -3594,18 +3594,19 @@ html.ios-inapp-banner-visible .ob-overlay {
   letter-spacing: 0.04em;
 }
 
-/* ── Карточки привычек — золотая рамка + угловые акценты ─ */
+/* ── Карточки привычек — золотая рамка ────────────────── */
+/* Не трогаем transform-style/backface-visibility: декоры идут на .hcard-front */
 [data-theme="deco-noir"] .hcard,
 [data-theme="deco-noir"] .bcard {
   background: #141210;
   border: 1px solid rgba(200,165,80,0.22);
   border-radius: 2px;
-  box-shadow: inset 0 0 40px rgba(200,165,80,0.02);
+  /* box-shadow намеренно не ставим: inset box-shadow на preserve-3d-контейнере
+     ломает backface-visibility в WebKit и карточка переворачивается вверх ногами */
 }
 
-/* Угловые декоративные L-элементы */
-[data-theme="deco-noir"] .hcard::before,
-[data-theme="deco-noir"] .bcard::before {
+/* Угловые L-декоры — только на лицевой стороне, она имеет backface-visibility:hidden */
+[data-theme="deco-noir"] .hcard-front::before {
   content: '';
   position: absolute;
   top: 5px;
@@ -3617,8 +3618,7 @@ html.ios-inapp-banner-visible .ob-overlay {
   pointer-events: none;
   z-index: 1;
 }
-[data-theme="deco-noir"] .hcard::after,
-[data-theme="deco-noir"] .bcard::after {
+[data-theme="deco-noir"] .hcard-front::after {
   content: '';
   position: absolute;
   bottom: 5px;
@@ -3915,11 +3915,9 @@ html.ios-inapp-banner-visible .ob-overlay {
   background: #FFFDF7;
   border: 1px solid rgba(154,104,40,0.18);
   border-radius: 2px;
-  box-shadow: 0 1px 6px rgba(154,104,40,0.05);
 }
 
-[data-theme="ivory"] .hcard::before,
-[data-theme="ivory"] .bcard::before {
+[data-theme="ivory"] .hcard-front::before {
   content: '';
   position: absolute;
   top: 5px;
@@ -3931,8 +3929,7 @@ html.ios-inapp-banner-visible .ob-overlay {
   pointer-events: none;
   z-index: 1;
 }
-[data-theme="ivory"] .hcard::after,
-[data-theme="ivory"] .bcard::after {
+[data-theme="ivory"] .hcard-front::after {
   content: '';
   position: absolute;
   bottom: 5px;
